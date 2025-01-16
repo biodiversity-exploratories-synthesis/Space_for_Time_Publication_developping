@@ -1,0 +1,49 @@
+file created : January 2023 by Lena Neuenkamp
+last edit : 31-01-23 by Noelle
+
+# AIM
+Scripts to fit and test the GDM models for temporal and spatial datasets, alpha and beta-diversity for plants, herbivores and predators.
+
+# CONTENT
+
+## Fitting GDM models
+Note that the GDM scripts are twin scripts, with identical code.
+- alpha diversity : space and year in one script : 
+    - plants
+    - herbivores
+    - predators
+- beta diversity : space and year in separate scripts : 
+    - plants
+        - space
+        - time
+    - herbivores
+        - space
+        - time
+    - predators
+        - space
+        - time
+
+## Permutation
+Calculate p-values by permutation with varIMP. 
+- space and time models : 
+    - alpha diversity 
+        - plants
+        - herbivores
+        - predators
+    - beta diversity
+        - plants
+        - herbivores
+        - predators
+
+Testing the function
+- GDM_varIMP_test_varimp.edit_function.R
+
+Functions are loaded from the /R folder
+
+Note that the Permutation part runs very slowly, and should be considered to be runned on a high-performance computer.
+
+# OTHER
+
+
+
+
