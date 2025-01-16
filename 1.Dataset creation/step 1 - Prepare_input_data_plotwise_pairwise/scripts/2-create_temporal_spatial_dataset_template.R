@@ -185,7 +185,7 @@ pwise_space <- merge(pwise_space, lui_covariates, by = c("EPy2", "YR"), all.x = 
 
 #Save data
 nrow(pwise_space) == 122925
-save(pwise_space, file = "1.Prepare_input_data_plotwise_pairwise/InputData/pwise_space_template.RData")
+save(pwise_space, file = "1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/InputData/pwise_space_template.RData")
 
 # Next script
 # 3-LUIresid_calculation.R
