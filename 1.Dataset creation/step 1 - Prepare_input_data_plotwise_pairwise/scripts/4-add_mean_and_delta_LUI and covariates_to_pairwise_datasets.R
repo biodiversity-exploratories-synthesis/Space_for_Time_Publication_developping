@@ -8,8 +8,8 @@
 # 0. Load Data
 ########
 
-load("step 1 - Prepare_input_data_plotwise_pairwise/data/pwise_space.RData")
-load("step 1 - Prepare_input_data_plotwise_pairwise/data/pwise_time.RData")
+load("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/pwise_space.RData")
+load("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/pwise_time.RData")
 
 #######
 ## 1. LUI and components
@@ -185,5 +185,5 @@ pwise_space$drain<- (pwise_space$precip_raindays1 - pwise_space$precip_raindays2
 ##########
 ## 3. Saving data
 
-save(pwise_space, file="1.Prepare_input_data_plotwise_pairwise/output/pwise_space.RData")
-save(pwise_time, file="1.Prepare_input_data_plotwise_pairwise/output/pwise_time.RData")
+save(pwise_space, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/output/pwise_space.RData")
+save(pwise_time, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/output/pwise_time.RData")
