@@ -339,7 +339,7 @@ rm(allclim)
 #
 # # # # # # # # # # # #
 
-save(lui_covariates, file="step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/lui_covariates.RData")
+save(lui_covariates, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/lui_covariates.RData")
 
 
 # Next script : 
