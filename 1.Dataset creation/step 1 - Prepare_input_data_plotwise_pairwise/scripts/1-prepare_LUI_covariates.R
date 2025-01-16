@@ -8,7 +8,7 @@
 
 # Aim : prepare LUI and Covariates data from BExIS raw data.
 #       values are continuously added to the growing variable lui_covariates.
-# Output : 1.Prepare_input_data_plotwise_pairwise/Outputdata/lui_covariates.RData
+# Output : 1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/Outputdata/lui_covariates.RData
 #       which is a large table of all lui and all covariate values across plots and years.
 #       note that not all variables were measured in every year. therefore, this output
 #       table contains quite some duplicated values (e.g. pH is the same across years)
@@ -25,7 +25,7 @@ library(factoextra) # visualise pca
 library(corrplot)
 #
 
-# set working directory to folder "Version_Publication".
+# set working directory to folder "Space_for_Time_Publication".
 
 # FUNCTIONS
 source("RFunctions/BEplotZeros.R")
@@ -45,25 +45,25 @@ f1 <- function(vec) {
 # Links and IDs can be found in the document "Supp_Dataset_description_GitHub.docx".
 
 # LUI data as downloaded from BExIS
-lui <- fread("1.Prepare_input_data_plotwise_pairwise/data/Rawdata/LUI_default components set__2023-03-13.txt")
+lui <- fread("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/Rawdata/LUI_default components set__2023-03-13.txt")
 
 # Coordinates
-plot.info <- fread("1.Prepare_input_data_plotwise_pairwise/data/Rawdata/20907_7_Dataset/20907_7_data.csv")
-plot.names <- fread("1.Prepare_input_data_plotwise_pairwise/data/Rawdata/20826_7_Dataset/20826_7_data.csv")
+plot.info <- fread("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/Rawdata/20907_7_Dataset/20907_7_data.csv")
+plot.names <- fread("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/Rawdata/20826_7_Dataset/20826_7_data.csv")
 # Use Longitude_Dec_ and Latitude_Dec (as in Gossner 2016 analysis)
 
 # load climate data as downloaded from BExIS
-clim <- fread("1.Prepare_input_data_plotwise_pairwise/data/Rawdata/Ta_200_Ta_200_DTR_Ta_200_gruenlandtemperatursumme_2008_2018_ef4298c30197645c/plots.csv")
-prec <- fread("1.Prepare_input_data_plotwise_pairwise/data/Rawdata/result_7726019124401210128/plots.csv")
+clim <- fread("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/Rawdata/Ta_200_Ta_200_DTR_Ta_200_gruenlandtemperatursumme_2008_2018_ef4298c30197645c/plots.csv")
+prec <- fread("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/Rawdata/result_7726019124401210128/plots.csv")
 # soil
-soil1 <- read.table("1.Prepare_input_data_plotwise_pairwise/data/Rawdata/14446_soil_grassland.txt", h = T)
-soil2 <- read.table("1.Prepare_input_data_plotwise_pairwise/data/Rawdata/17086_pools_Grasslands.txt", h = T)
-pH <- read.table("1.Prepare_input_data_plotwise_pairwise/data/Rawdata/14447_pH_grassland.txt", h=T)
+soil1 <- read.table("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/Rawdata/14446_soil_grassland.txt", h = T)
+soil2 <- read.table("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/Rawdata/17086_pools_Grasslands.txt", h = T)
+pH <- read.table("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/Rawdata/14447_pH_grassland.txt", h=T)
 # landscape measures
-landscape <- fread("1.Prepare_input_data_plotwise_pairwise/data/Rawdata/30318_NEE2020_Aggregated environmental and land use covariates of grassland EPs.csv")
+landscape <- fread("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/Rawdata/30318_NEE2020_Aggregated environmental and land use covariates of grassland EPs.csv")
 landscape <- data.table(BEplotZeros(landscape, column = "EP_PlotID", plotnam = "EP"))
 setnames(landscape, old = c("EP_PlotID", "EP"), new = c("oldEP", "EP_PlotID"))
-plt.sur <- fread("1.Prepare_input_data_plotwise_pairwise/data/Rawdata/18148_landscape.txt")
+plt.sur <- fread("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/Rawdata/18148_landscape.txt")
 #
 # # # # # #
 # DOCUMENTATION
