@@ -41,8 +41,8 @@ save_interim_output <- T # should the interim datasets be saved? (between step 1
 # data
 
 # set working directory to folder "1.Dataset creation".
-load("./step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/pwise_space_template.RData")
-load("./step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/pwise_time_template.RData") 
+load("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/pwise_space_template.RData")
+load("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/pwise_time_template.RData") 
 
 
 # # # # # # # # # # # # # # # # # # # # # #
@@ -81,7 +81,7 @@ length(unique(sitepred_pwise_space$LUI1)) <= 150*11 # check : not too many LUI v
 nrow(unique(sitepred_pwise_space[, .(HWG1, RWG1)])) # check : 150 unique coordinates there
 
 if(save_interim_output == T){
-  save(sitepred_pwise_space, file="1.Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_space_step1.RData")
+  save(sitepred_pwise_space, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_space_step1.RData")
   }
 rm(sitepred_pwise_space) # remove so it's not mixed up with pwise_sitepred_time
 rm(pwise_space)
@@ -116,7 +116,7 @@ nrow(unique(sitepred_pwise_time[, .(HWG, RWG)])) # check : 150 unique coordinate
 nrow(unique(sitepred_pwise_time[, .(EP, YR1)])) == 150 * 11
 
 if(save_interim_output == T){
-  save(sitepred_pwise_time, file="1.Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_time_step1.RData")}
+  save(sitepred_pwise_time, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_time_step1.RData")}
 rm(sitepred_pwise_time)
 rm(pwise_time)
 # # # # # # # # # # # # # #
@@ -126,8 +126,8 @@ rm(pwise_time)
 # # # # # # # # # # # # # #
 #load data
 if(save_interim_output == T){
-  load("1.Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_space_step1.RData")
-  load("1.Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_time_step1.RData")
+  load("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_space_step1.RData")
+  load("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_time_step1.RData")
 }
 
 
@@ -142,7 +142,7 @@ sitepred_pwise_space$GRAres<- residuals(lm(Gstd1 ~ YR, data=sitepred_pwise_space
 sitepred_pwise_space$FERres<- residuals(lm(Fstd1 ~ YR, data=sitepred_pwise_space))
 
 if(save_interim_output == T){
-  save(sitepred_pwise_space, file="1.Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_space_step2.RData")
+  save(sitepred_pwise_space, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_space_step2.RData")
 }
 
 
@@ -158,7 +158,7 @@ sitepred_pwise_time$GRAres<- residuals(lm(Gstd1 ~ EP, data=sitepred_pwise_time))
 sitepred_pwise_time$FERres<- residuals(lm(Fstd1 ~ EP, data=sitepred_pwise_time))
 
 if(save_interim_output == T){
-  save(sitepred_pwise_time, file="1.Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_time_step2.RData")
+  save(sitepred_pwise_time, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_time_step2.RData")
 }
 rm(sitepred_pwise_time)
 
@@ -173,11 +173,11 @@ rm(sitepred_pwise_time)
 #
 if(save_interim_output == T){
   # load data
-  load("1.Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_space_step2.RData")
-  load("1.Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_time_step2.RData")
+  load("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_space_step2.RData")
+  load("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_time_step2.RData")
   # load site-pair table data
-  load("1.Prepare_input_data_plotwise_pairwise/data/InputData/pwise_space_template.RData")
-  load("1.Prepare_input_data_plotwise_pairwise/data/InputData/pwise_time_template.RData")
+  load("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/pwise_space_template.RData")
+  load("1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/pwise_time_template.RData")
   pwise_space <- data.table(pwise_space)
   old_pwise_space <- data.table(pwise_space)
   pwise_time <- data.table(pwise_time)
@@ -238,7 +238,7 @@ all.equal(data.frame(pwise_space[, 1:34]), data.frame(old_pwise_space)) # only t
 all.equal(data.frame(pwise_space[, .(EPy1, EPy2, EP1, EP2, LUI1)]), data.frame(old_pwise_space[, .(EPy1, EPy2, EP1, EP2, LUI1)]))
 
 # save
-save(pwise_space, file="1.Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_space_step3.RData")
+save(pwise_space, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_space_step3.RData")
 
 rm(pwise_space); rm(old_pwise_space); rm(sitepred_pwise_space)
 rm(test); rm(s1_match_cols); rm(s2_match_cols)
@@ -296,7 +296,7 @@ all.equal(data.frame(pwise_time[, 1:32]), data.frame(old_pwise_time)) # only the
 all.equal(data.frame(pwise_time[, .(EPy1, EPy2, EP, YR1, YR2,LUI1)]), data.frame(old_pwise_time[, .(EPy1, EPy2, EP, YR1, YR2, LUI1)]))
 
 # save
-save(pwise_time, file="1.Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_time_in_step3.RData")
+save(pwise_time, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/sitepred_pwise_time_in_step3.RData")
 
 rm(pwise_time); rm(old_pwise_time); rm(sitepred_pwise_time)
 rm(test); rm(s1_match_cols); rm(s2_match_cols)
