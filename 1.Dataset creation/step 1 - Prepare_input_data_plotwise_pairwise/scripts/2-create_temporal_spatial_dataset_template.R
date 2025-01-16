@@ -18,7 +18,7 @@ library(vegan)
 # # # # #
 # 0.a. - DATA ----
 # set working directory to folder "1.Dataset creation".
-load("./step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/lui_covariates.RData") #called: lui_covariates
+load("./1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/InputData/lui_covariates.RData") #called: lui_covariates
 
 # # # # #
 # 0.b. - FUNCTIONS ----
