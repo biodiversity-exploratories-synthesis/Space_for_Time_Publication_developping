@@ -7,10 +7,10 @@
 
 # # # # # # # # # # # # # #
 # CONTENT                  ----
-# AIM : 
-# OUTPUT : 
-#TODO
-# Note : 2000 lines long, contains code to create all figures
+# AIM : contains code to create all figures
+# The data paths need to be adapted to the directory situation. If the recommendations
+# of folder Structure in 1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/README.txt were followed:
+# "1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/OutputData/"
 
 
 # # # # # # # # # # # # # #
