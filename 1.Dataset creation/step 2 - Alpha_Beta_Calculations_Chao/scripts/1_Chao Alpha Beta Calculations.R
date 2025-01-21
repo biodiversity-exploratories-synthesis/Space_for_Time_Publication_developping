@@ -21,14 +21,16 @@ library(vegan)
 #load data
 
 #pairwise datasets as created from github
+
+#set working directory to folder "step 2- Alpha_Beta_calculations_Chao"
 #pwise_space
-load("2.Alpha_Beta_Calculations_Chao/data/pwise_space.RData")
-load("2.Alpha_Beta_Calculations_Chao/data/pwise_time.RData")
+load("data/RawData/pwise_space.RData")
+load("data/RawData/pwise_time.RData")
 
 #community data
-load("2.Alpha_Beta_Calculations_Chao/data/plants_rd.RData")
-load("2.Alpha_Beta_Calculations_Chao/data/herb.RData")
-load("2.Alpha_Beta_Calculations_Chao/data/pred.RData")
+load("data/InputData/plants_rd.RData")
+load("data/InputData/data/herb.RData")
+load("data/InputData/pred.RData")
 
 
 # 1. Plants ----
@@ -177,10 +179,10 @@ nrow(pwise_space) >= nrow(pwisedata_cleaned)
 #save as
 pwise_space_plants<- pwisedata_cleaned
 
-save(pwise_space_plants, file="2.Alpha_Beta_Calculations_Chao/output/pwise_space_plants.RData")
+save(pwise_space_plants, file="data/OutputData/pwise_space_plants.RData")
 # backup save as csv (large file)
 write.table(pwise_space_plants, 
-            file="2.Alpha_Beta_Calculations_Chao/output/pwise_space_plants.csv",
+            file="data/OutputData/pwise_space_plants.csv",
             sep = ",", quote = F, row.names = F)
 
 rm(pwisedata_alphabeta)
@@ -329,10 +331,10 @@ pwisedata_cleaned <- pwisedata_alphabeta[!exclude_rows, ]
 # save as
 pwise_time_plants<- pwisedata_cleaned
 
-save(pwise_time_plants, file="2.Alpha_Beta_Calculations_Chao/output/pwise_time_plants.RData")
+save(pwise_time_plants, file="data/OutputData/pwise_time_plants.RData")
 # backup save as csv (large file)
 write.table(pwise_time_plants, 
-            file="2.Alpha_Beta_Calculations_Chao/output/pwise_time_plants.csv",
+            file="data/OutputData/pwise_time_plants.csv",
             sep = ",", quote = F, row.names = F)
 
 rm(pwisedata_alphabeta)
@@ -616,8 +618,8 @@ pwise_space_pred <- pwise_space_pred[, which(!colnames(pwise_space_pred) %in% gr
 # 30052 rows are removed, 92873 are kept of a total of 122925
 
 #save
-save(pwise_space_herb, file="2.Alpha_Beta_Calculations_Chao/output/pwise_space_herb.RData")
-save(pwise_space_pred, file="2.Alpha_Beta_Calculations_Chao/output/pwise_space_pred.RData")
+save(pwise_space_herb, file="data/OutputData/pwise_space_herb.RData")
+save(pwise_space_pred, file="data/OutputData/pwise_space_pred.RData")
 # -- DONE Noelle
 
 rm(pwisedata_alphabeta)
@@ -898,8 +900,8 @@ pwise_time_pred <- pwise_time_pred[, which(!colnames(pwise_time_pred) %in% grep(
 #TODO @Lena fill in true values
 
 #save
-save(pwise_time_herb, file="2.Alpha_Beta_Calculations_Chao/output/pwise_time_herb.RData")
-save(pwise_time_pred, file="2.Alpha_Beta_Calculations_Chao/output/pwise_time_pred.RData")
+save(pwise_time_herb, file="data/OutputData/pwise_time_herb.RData")
+save(pwise_time_pred, file="data/OutputData/pwise_time_pred.RData")
 #TODO @Lena : rename if wanted
 # -- DONE Noelle
 
