@@ -28,30 +28,32 @@ library(patchwork)
 # # # # #
 # 0.a. - DATA ----
 #
+#set working directory to folder "2.GDM"
 #herbivores
-#load("./pwise_space_new.RData")
-#load("./pwise_time_new.RData")
-load("./sitepred_pwise_space_in_step3.RData")#new pwise_space with updated LUI residuals
-load("./sitepred_pwise_time_in_step3.RData")#new pwise_space with updated LUI residuals
+load("./data/InputData/pwise_time_herb.RData")
+load("./data/InputData/pwise_space_herb.RData")
+
+# if the uploaded, assembled data files are used, upload the complete insect files
+# here.
 
 # Preparing datasets
 #
 # make sure distances are not <0, >1 --> restrict to a tiny bit >0 and <1 --> DO NOT SAVE this
 # vegan::decostand()
-pwise_space$dha0st<- decostand(pwise_space$dha0, method="range", na.rm=T)
-pwise_space$dha1st<- decostand(pwise_space$dha1, method="range", na.rm=T)
-pwise_space$dha2st<- decostand(pwise_space$dha2, method="range", na.rm=T)
-pwise_space$dha3st<- decostand(pwise_space$dha3, method="range", na.rm=T)
-pwise_space$dha4st<- decostand(pwise_space$dha4, method="range", na.rm=T)
+pwise_space_herb$dha0st<- decostand(pwise_space_herb$dha0, method="range", na.rm=T)
+pwise_space_herb$dha1st<- decostand(pwise_space_herb$dha1, method="range", na.rm=T)
+pwise_space_herb$dha2st<- decostand(pwise_space_herb$dha2, method="range", na.rm=T)
+pwise_space_herb$dha3st<- decostand(pwise_space_herb$dha3, method="range", na.rm=T)
+pwise_space_herb$dha4st<- decostand(pwise_space_herb$dha4, method="range", na.rm=T)
 
-pwise_time$dha0st<- decostand(pwise_time$dha0abs, method="range", na.rm=T)
-pwise_time$dha1st<- decostand(pwise_time$dha1abs, method="range", na.rm=T)
-pwise_time$dha2st<- decostand(pwise_time$dha2abs, method="range", na.rm=T)
-pwise_time$dha3st<- decostand(pwise_time$dha3abs, method="range", na.rm=T)
-pwise_time$dha4st<- decostand(pwise_time$dha4abs, method="range", na.rm=T)
-#TODO is this in the methods?
+pwise_time_herb$dha0st<- decostand(pwise_time_herb$dha0abs, method="range", na.rm=T)
+pwise_time_herb$dha1st<- decostand(pwise_time_herb$dha1abs, method="range", na.rm=T)
+pwise_time_herb$dha2st<- decostand(pwise_time_herb$dha2abs, method="range", na.rm=T)
+pwise_time_herb$dha3st<- decostand(pwise_time_herb$dha3abs, method="range", na.rm=T)
+pwise_time_herb$dha4st<- decostand(pwise_time_herb$dha4abs, method="range", na.rm=T)
 
-
+pwise_space<- pwise_space_herb
+pwise_time<- pwise_time_herb
 
 # # # # # # # # # # # # # #
 # 1 - SPATIAL DATASET              ----
@@ -395,74 +397,7 @@ for(i in 1:4){
 
 splines_alpha_herb_sc_space<- splines_alpha_herb_sc
 
-save(splines_alpha_herb_sc_space, file="splines_alpha_herb_sc_space.RData")
-
-#write.table(splines_alpha_herb_sc_space, file="splines.txt")
-
-
-
-
-
-
-
-# # # # #
-# 1.5. -  PLOT ----
-# 
-load("./splines_alpha_herb_sc_space.RData")
-
-# LUI
-p1 <- ggplot(splines_alpha_herb_sc_space, aes(x = LUIx, y = LUIy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0)) +
-  scale_colour_hue(name="Type of Alpha Diversity", l=50) +
-  xlab("LUI (scaled to year average)")+
-  ylab("Effect of LUI differences on alpha-diversity")+
-  ggtitle("a - Land use intensity (LUI)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p1
-
-# Mowing
-p2<- ggplot(splines_alpha_herb_sc_space, aes(x=MOWx, y=MOWy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("MOW (scaled to year average)")+
-  ylab("Effect of MOW differences on alpha-diversity")+
-  ggtitle("b - Mowing frequency (MOW)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p2
-
-# Grazing
-p3<- ggplot(splines_alpha_herb_sc_space, aes(x=GRAx, y=GRAy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("GRA (scaled to year average)")+
-  ylab("Effect of GRA differences on alpha-diversity")+
-  ggtitle("c - Grazing intensity (GRA)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p3
-
-# Fertilisation
-p4<- ggplot(splines_alpha_herb_sc_space, aes(x=FERx, y=FERy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("FER (scaled to year average)")+
-  ylab("Effect of FER differences on alpha-diversity")+
-  ggtitle("d - Fertilisation intensity (FER)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p4
-
-
-p1 + p2 + p3 + p4 + plot_layout(guides="collect")
-ggsave("ResultsPlots/herb_space_LUsplines_alpha_scaled.png")
-
-
+save(splines_alpha_herb_sc_space, file="./data/OutputData/splines_alpha_herb_sc_space.RData")
 
 
 # # # # # # # # # # # # # #
@@ -747,62 +682,6 @@ remove(dat, gdmTab)
 
 splines_alpha_herb_sc_time<- splines_alpha_herb_sc
 
-save(splines_alpha_herb_sc_time, file="splines_alpha_herb_sc_time.RData")
+save(splines_alpha_herb_sc_time, file="./data/OutputData/splines_alpha_herb_sc_time.RData")
 
-#write.table(splines_alpha_herb_sc_space, file="splines.txt")
-
-
-# # # # #
-# 2.5. -  PLOT ----
-# 
-
-# LUI Index
-p1<- ggplot(splines_alpha_herb_sc_time, aes(x = LUIx, y = LUIy, colour = alpha_type))+
-  geom_line(size = 1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("LUI (scaled to EP average)")+
-  ylab("Effect of LUI differences on alpha-diversity")+
-  ggtitle("a - Land use intensity (LUI)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p1
-
-# Mowing
-p2<- ggplot(splines_alpha_herb_sc_time, aes(x=MOWx, y=MOWy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("MOW (scaled to EP average)")+
-  ylab("Effect of MOW differences on alpha-diversity")+
-  ggtitle("b - Mowing frequency (MOW)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p2
-
-# Grazing
-p3<- ggplot(splines_alpha_herb_sc_time, aes(x=GRAx, y=GRAy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("GRA (scaled to EP average)")+
-  ylab("Effect of GRA differences on alpha-diversity")+
-  ggtitle("c - Grazing intensity (GRA)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p3
-
-# Fertilisation
-p4<- ggplot(splines_alpha_herb_sc_time, aes(x=FERx, y=FERy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("FER (scaled to EP average)")+
-  ylab("Effect of FER differences on alpha-diversity")+
-  ggtitle("d - Fertilisation intensity (FER)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p4
-
-p1 + p2 + p3 + p4 + plot_layout(guides="collect")
-ggsave("ResultsPlots/herb_time_LUsplines_alpha_scaled.png")
+remove(pwise_space, pwise_time)

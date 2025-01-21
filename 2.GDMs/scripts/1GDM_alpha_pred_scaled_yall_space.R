@@ -28,30 +28,32 @@ library(patchwork)
 # 0.a. - DATA ----
 #
 # predators
-#load("./pwise_space_new.RData")
-#load("./pwise_time_new.RData")
-#TODO above is deprecated right?
-load("./sitepred_pwise_space_in_step3.RData")#new pwise_space with updated LUI residuals
-load("./sitepred_pwise_time_in_step3.RData")#new pwise_space with updated LUI residuals
+#set working directory to folder "2.GDM"
+#secondary consumers/predators
+load("./data/InputData/pwise_time_pred.RData")
+load("./data/InputData/pwise_space_pred.RData")
 
+# if the uploaded, assembled data files are used, upload the complete insect files
+# here.
 
 # Preparing datasets
 #
 # make sure distances are not <0, >1 --> restrict to a tiny bit >0 and <1 --> DO NOT SAVE this
 # vegan::decostand()
-pwise_space$dpa0st<- decostand(pwise_space$dpa0, method="range", na.rm=T)
-pwise_space$dpa1st<- decostand(pwise_space$dpa1, method="range", na.rm=T)
-pwise_space$dpa2st<- decostand(pwise_space$dpa2, method="range", na.rm=T)
-pwise_space$dpa3st<- decostand(pwise_space$dpa3, method="range", na.rm=T)
-pwise_space$dpa4st<- decostand(pwise_space$dpa4, method="range", na.rm=T)
+pwise_space_pred$dpa0st<- decostand(pwise_space_pred$dpa0, method="range", na.rm=T)
+pwise_space_pred$dpa1st<- decostand(pwise_space_pred$dpa1, method="range", na.rm=T)
+pwise_space_pred$dpa2st<- decostand(pwise_space_pred$dpa2, method="range", na.rm=T)
+pwise_space_pred$dpa3st<- decostand(pwise_space_pred$dpa3, method="range", na.rm=T)
+pwise_space_pred$dpa4st<- decostand(pwise_space_pred$dpa4, method="range", na.rm=T)
 
-pwise_time$dpa0st<- decostand(pwise_time$dpa0abs, method="range", na.rm=T)
-pwise_time$dpa1st<- decostand(pwise_time$dpa1abs, method="range", na.rm=T)
-pwise_time$dpa2st<- decostand(pwise_time$dpa2abs, method="range", na.rm=T)
-pwise_time$dpa3st<- decostand(pwise_time$dpa3abs, method="range", na.rm=T)
-pwise_time$dpa4st<- decostand(pwise_time$dpa4abs, method="range", na.rm=T)
+pwise_time_pred$dpa0st<- decostand(pwise_time_pred$dpa0abs, method="range", na.rm=T)
+pwise_time_pred$dpa1st<- decostand(pwise_time_pred$dpa1abs, method="range", na.rm=T)
+pwise_time_pred$dpa2st<- decostand(pwise_time_pred$dpa2abs, method="range", na.rm=T)
+pwise_time_pred$dpa3st<- decostand(pwise_time_pred$dpa3abs, method="range", na.rm=T)
+pwise_time_pred$dpa4st<- decostand(pwise_time_pred$dpa4abs, method="range", na.rm=T)
 
-
+pwise_space<- pwise_space_pred
+pwise_time<- pwise_time_pred
 
 # # # # # # # # # # # # # #
 # 1 - SPATIAL DATASET              ----
@@ -394,70 +396,7 @@ for(i in 1:4){
 
 splines_alpha_pred_sc_space<- splines_alpha_pred_sc
 
-save(splines_alpha_pred_sc_space, file="splines_alpha_pred_sc_space.RData")
-
-
-
-#write.table(splines_alpha_pred_sc_space, file="splines.txt")
-
-
-# # # # #
-# 1.5. -  PLOT ----
-# 
-
-load("./splines_alpha_pred_sc_space.RData")
-
-# LUI
-p1<- ggplot(splines_alpha_pred_sc_space, aes(x=LUIx, y=LUIy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("LUI (scaled to year average)")+
-  ylab("Effect of LUI differences on alpha-diversity")+
-  ggtitle("a - Land use intensity (LUI)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p1
-
-# Mowing
-p2<- ggplot(splines_alpha_pred_sc_space, aes(x=MOWx, y=MOWy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("MOW (scaled to year average)")+
-  ylab("Effect of MOW differences on alpha-diversity")+
-  ggtitle("b - Mowing frequency (MOW)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p2
-
-# Grazing
-p3<- ggplot(splines_alpha_pred_sc_space, aes(x=GRAx, y=GRAy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("GRA (scaled to year average)")+
-  ylab("Effect of GRA differences on alpha-diversity")+
-  ggtitle("c - Grazing intensity (GRA)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p3
-
-# Fertilisation
-p4<- ggplot(splines_alpha_pred_sc_space, aes(x=FERx, y=FERy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("FER (scaled to year average)")+
-  ylab("Effect of FER differences on alpha-diversity")+
-  ggtitle("d - Fertilisation intensity (FER)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p4
-
-p1 + p2 + p3 + p4 + plot_layout(guides="collect")
-ggsave("ResultsPlots/pred_space_LUsplines_alpha_scaled.png")
-
+save(splines_alpha_pred_sc_space, file="./data/OutputData/splines_alpha_pred_sc_space.RData")
 
 
 
@@ -741,64 +680,7 @@ remove(dat, gdmTab)
 
 splines_alpha_pred_sc_time<- splines_alpha_pred_sc
 
-save(splines_alpha_pred_sc_time, file="splines_alpha_pred_sc_time.RData")
-
-#write.table(splines_alpha_pred_sc_space, file="splines.txt")
+save(splines_alpha_pred_sc_time, file="data/OutputData/splines_alpha_pred_sc_time.RData")
 
 
-
-
-# # # # #
-# 2.5. -  PLOT ----
-# 
-
-# LUI
-p1<- ggplot(splines_alpha_pred_sc_time, aes(x=LUIx, y=LUIy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("LUI (scaled to EP average)")+
-  ylab("Effect of LUI differences on alpha-diversity")+
-  ggtitle("a - Land use intensity (LUI)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p1
-
-# Mowing
-p2<- ggplot(splines_alpha_pred_sc_time, aes(x=MOWx, y=MOWy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("MOW (scaled to EP average)")+
-  ylab("Effect of MOW differences on alpha-diversity")+
-  ggtitle("b - Mowing frequency (MOW)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p2
-
-# Grazing
-p3<- ggplot(splines_alpha_pred_sc_time, aes(x=GRAx, y=GRAy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("GRA (scaled to EP average)")+
-  ylab("Effect of GRA differences on alpha-diversity")+
-  ggtitle("c - Grazing intensity (GRA)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p3
-
-# Fertilisation
-p4<- ggplot(splines_alpha_pred_sc_time, aes(x=FERx, y=FERy, colour=alpha_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 0.5), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Alpha Diversity", l=50)+
-  xlab("FER (scaled to EP average)")+
-  ylab("Effect of FER differences on alpha-diversity")+
-  ggtitle("d - Fertilisation intensity (FER)")+
-  #geom_text(aes(x = 3.9, y = 0.45, label = "EV% = 0.1"), color="black") + 
-  theme_classic()
-p4
-
-p1 + p2 + p3 + p4 + plot_layout(guides="collect")
-ggsave("ResultsPlots/pred_time_LUsplines_alpha_scaled.png")
+remove(pwise_time, pwise_space)
