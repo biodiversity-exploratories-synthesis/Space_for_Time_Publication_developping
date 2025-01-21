@@ -43,7 +43,7 @@ rownames(plants_short)<- interaction(plants_short$Useful_EP_PlotID, plants_short
 
 #remove plot-year combination that have no values/were not sampled/have only NAs
 
-plants_complete<- plants_short[complete.cases(plants_short),c(5:372]
+plants_complete<- plants_short[complete.cases(plants_short),c(5:372)]
 
 
 #replace cover values of 0.1 and 0.5 by 1 in the dataset
