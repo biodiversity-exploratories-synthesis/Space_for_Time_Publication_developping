@@ -59,6 +59,12 @@ da2<- c()
 da3<- c()
 da4<- c()
 
+da0st<- c()
+da1st<- c()
+da2st<- c()
+da3st<- c()
+da4st<- c()
+
 bsim<-c()
 b0<- c()
 b1<- c()
@@ -93,6 +99,12 @@ for(i in 1:nrow(pwisedata)){
     da2<- c(da2, NA)
     da3<- c(da3, NA)
     da4<- c(da4, NA)
+    
+    da0st<- c(da0st, NA)
+    da1st<- c(da1st, NA)
+    da2st<- c(da2st, NA)
+    da3st<- c(da3st, NA)
+    da4st<- c(da4st, NA)
     
     bsim<- c(bsim,NA)
     b0<- c(b0,NA)
@@ -138,6 +150,12 @@ for(i in 1:nrow(pwisedata)){
     da3<- c(da3, (abs(alpha3[1]-alpha3[2])))
     da4<- c(da4, (abs(alpha4[1]-alpha4[2])))
     
+    da0st<- decostand(da0, method="range", na.rm=T)
+    da1st<- decostand(da1, method="range", na.rm=T)
+    da2st<- decostand(da2, method="range", na.rm=T)
+    da3st<- decostand(da3, method="range", na.rm=T)
+    da4st<- decostand(da4, method="range", na.rm=T)
+    
     bsim<- c(bsim,betasim$beta.sim)
     b0<- c(b0, beta0$TD_beta)
     b1<- c(b1, beta1$TD_beta)
@@ -156,11 +174,11 @@ pwisedata_alphabeta<- data.frame(pwisedata,
                                  a3_EP1, a3_EP2,
                                  a4_EP1, a4_EP2,
                                  da0, da1, da2, da3, da4,
+                                 da0st, da1st, da2st, da3st, da4st,
                                  bsim, b0, b1, b2, b3, b4
 )
 
 #reduce dataset to only those combination for which diversity estimates are there
-#DONE Noelle
 # some of the combinations do not exist, because no data was collected in some
 #   of the years. Exclude those cases.
 div_names <- grep("a[0-9]_|bsim|[ab][0-4]", names(pwisedata_alphabeta), value = T)
@@ -215,6 +233,12 @@ da2<- c()
 da3<- c()
 da4<- c()
 
+da0st<- c()
+da1st<- c()
+da2st<- c()
+da3st<- c()
+da4st<- c()
+
 bsim<-c()
 b0<- c()
 b1<- c()
@@ -248,6 +272,12 @@ for(i in 1:nrow(pwisedata)){
     da2<- c(da2, NA)
     da3<- c(da3, NA)
     da4<- c(da4, NA)
+    
+    da0st<- c(da0st, NA)
+    da1st<- c(da1st, NA)
+    da2st<- c(da2st, NA)
+    da3st<- c(da3st, NA)
+    da4st<- c(da4st, NA)
     
     bsim<- c(bsim,NA)
     b0<- c(b0,NA)
@@ -293,6 +323,12 @@ for(i in 1:nrow(pwisedata)){
     da3<- c(da3, (abs(alpha3[1]-alpha3[2])))
     da4<- c(da4, (abs(alpha4[1]-alpha4[2])))
     
+    da0st<- decostand(da0, method="range", na.rm=T)
+    da1st<- decostand(da1, method="range", na.rm=T)
+    da2st<- decostand(da2, method="range", na.rm=T)
+    da3st<- decostand(da3, method="range", na.rm=T)
+    da4st<- decostand(da4, method="range", na.rm=T)
+    
     bsim<- c(bsim,betasim$beta.sim)
     b0<- c(b0, beta0$TD_beta)
     b1<- c(b1, beta1$TD_beta)
@@ -311,11 +347,12 @@ pwisedata_alphabeta<- data.frame(pwisedata,
                                  a3_EP1, a3_EP2,
                                  a4_EP1, a4_EP2,
                                  da0, da1, da2, da3, da4,
+                                 da0st, da1st, da2st, da3st, da4st,
                                  bsim, b0, b1, b2, b3, b4
 )
 
 #reduce dataset to only those combination for which diversity estimates are there
-# DONE Noelle --
+
 # some of the combinations do not exist, because no data was collected in some
 #   of the years. Exclude those cases.
 div_names <- grep("a[0-9]_|bsim|[ab][0-4]", names(pwisedata_alphabeta), value = T)
@@ -370,6 +407,12 @@ dha2<- c()
 dha3<- c()
 dha4<- c()
 
+dha0st<- c()
+dha1st<- c()
+dha2st<- c()
+dha3st<- c()
+dha4st<- c()
+
 hbsim<-c()
 hb0<- c()
 hb1<- c()
@@ -396,6 +439,12 @@ dpa1<- c()
 dpa2<- c()
 dpa3<- c()
 dpa4<- c()
+
+dpa0st<- c()
+dpa1st<- c()
+dpa2st<- c()
+dpa3st<- c()
+dpa4st<- c()
 
 pbsim<-c()
 pb0<- c()
@@ -430,6 +479,12 @@ for(i in 1:nrow(pwisedata)){
     dha2<- c(dha2, NA)
     dha3<- c(dha3, NA)
     dha4<- c(dha4, NA)
+    
+    dha0st<- c(dha0st, NA)
+    dha1st<- c(dha1st, NA)
+    dha2st<- c(dha2st, NA)
+    dha3st<- c(dha3st, NA)
+    dha4st<- c(dha4st, NA)
     
     hbsim<- c(hbsim,NA)
     hb0<- c(hb0,NA)
@@ -475,6 +530,12 @@ for(i in 1:nrow(pwisedata)){
     dha3<- c(dha3, (abs(halpha3[1]-halpha3[2])))
     dha4<- c(dha4, (abs(halpha4[1]-halpha4[2])))
     
+    dha0st<- decostand(dha0, method="range", na.rm=T)
+    dha1st<- decostand(dha1, method="range", na.rm=T)
+    dha2st<- decostand(dha2, method="range", na.rm=T)
+    dha3st<- decostand(dha3, method="range", na.rm=T)
+    dha4st<- decostand(dha4, method="range", na.rm=T)
+    
     hbsim<- c(hbsim,hbetasim$beta.sim)
     hb0<- c(hb0, hbeta0$TD_beta)
     hb1<- c(hb1, hbeta1$TD_beta)
@@ -509,6 +570,12 @@ for(i in 1:nrow(pwisedata)){
     dpa2<- c(dpa2, NA)
     dpa3<- c(dpa3, NA)
     dpa4<- c(dpa4, NA)
+    
+    dpa0st<- c(dpa0st, NA)
+    dpa1st<- c(dpa1st, NA)
+    dpa2st<- c(dpa2st, NA)
+    dpa3st<- c(dpa3st, NA)
+    dpa4st<- c(dpa4st, NA)
     
     pbsim<- c(pbsim,NA)
     pb0<- c(pb0,NA)
@@ -554,6 +621,12 @@ for(i in 1:nrow(pwisedata)){
     dpa3<- c(dpa3, (abs(palpha3[1]-palpha3[2])))
     dpa4<- c(dpa4, (abs(palpha4[1]-palpha4[2])))
     
+    dpa0st<- decostand(dpa0, method="range", na.rm=T)
+    dpa1st<- decostand(dpa1, method="range", na.rm=T)
+    dpa2st<- decostand(dpa2, method="range", na.rm=T)
+    dpa3st<- decostand(dpa3, method="range", na.rm=T)
+    dpa4st<- decostand(dpa4, method="range", na.rm=T)
+    
     pbsim<- c(pbsim,pbetasim$beta.sim)
     pb0<- c(pb0, pbeta0$TD_beta)
     pb1<- c(pb1, pbeta1$TD_beta)
@@ -571,6 +644,7 @@ pwisedata_alphabeta<- data.frame(pwisedata,
                                  ha3_EP1, ha3_EP2,
                                  ha4_EP1, ha4_EP2,
                                  dha0, dha1, dha2, dha3, dha4,
+                                 dha0st, dha1st, dha2st, dha3st, dha4st,
                                  hbsim, hb0, hb1, hb2, hb3, hb4,
                                  pa0_EP1, pa0_EP2,
                                  pa1_EP1, pa1_EP2,
@@ -578,6 +652,7 @@ pwisedata_alphabeta<- data.frame(pwisedata,
                                  pa3_EP1, pa3_EP2,
                                  pa4_EP1, pa4_EP2,
                                  dpa0, dpa1, dpa2, dpa3, dpa4,
+                                 dpa0st, dpa1st, dpa2st, dpa3st, dpa4st,
                                  pbsim, pb0, pb1, pb2, pb3, pb4
 )
 
@@ -649,6 +724,12 @@ dha2<- c()
 dha3<- c()
 dha4<- c()
 
+dha0st<- c()
+dha1st<- c()
+dha2st<- c()
+dha3st<- c()
+dha4st<- c()
+
 hbsim<-c()
 hb0<- c()
 hb1<- c()
@@ -675,6 +756,12 @@ dpa1<- c()
 dpa2<- c()
 dpa3<- c()
 dpa4<- c()
+
+dpa0st<- c()
+dpa1st<- c()
+dpa2st<- c()
+dpa3st<- c()
+dpa4st<- c()
 
 pbsim<-c()
 pb0<- c()
@@ -710,6 +797,12 @@ for(i in 1:nrow(pwisedata)){
     dha2<- c(dha2, NA)
     dha3<- c(dha3, NA)
     dha4<- c(dha4, NA)
+    
+    dha0st<- c(dha0, NA)
+    dha1st<- c(dha1, NA)
+    dha2st<- c(dha2, NA)
+    dha3st<- c(dha3, NA)
+    dha4st<- c(dha4, NA)
     
     hbsim<- c(hbsim,NA)
     hb0<- c(hb0,NA)
@@ -753,6 +846,12 @@ for(i in 1:nrow(pwisedata)){
     dha3<- c(dha3, (abs(halpha3[1]-halpha3[2])))
     dha4<- c(dha4, (abs(halpha4[1]-halpha4[2])))
     
+    dha0st<- decostand(dha0, method="range", na.rm=T)
+    dha1st<- decostand(dha1, method="range", na.rm=T)
+    dha2st<- decostand(dha2, method="range", na.rm=T)
+    dha3st<- decostand(dha3, method="range", na.rm=T)
+    dha4st<- decostand(dha4, method="range", na.rm=T)
+    
     hbsim<- c(hbsim,hbetasim$beta.sim)
     hb0<- c(hb0, hbeta0$TD_beta)
     hb1<- c(hb1, hbeta1$TD_beta)
@@ -787,6 +886,12 @@ for(i in 1:nrow(pwisedata)){
     dpa2<- c(dpa2, NA)
     dpa3<- c(dpa3, NA)
     dpa4<- c(dpa4, NA)
+    
+    dpa0st<- c(dpa0st, NA)
+    dpa1st<- c(dpa1st, NA)
+    dpa2st<- c(dpa2st, NA)
+    dpa3st<- c(dpa3st, NA)
+    dpa4st<- c(dpa4st, NA)
     
     pbsim<- c(pbsim,NA)
     pb0<- c(pb0,NA)
@@ -830,6 +935,12 @@ for(i in 1:nrow(pwisedata)){
     dpa3<- c(dpa3, (abs(palpha3[1]-palpha3[2])))
     dpa4<- c(dpa4, (abs(palpha4[1]-palpha4[2])))
     
+    dpa0st<- decostand(dpa0, method="range", na.rm=T)
+    dpa1st<- decostand(dpa1, method="range", na.rm=T)
+    dpa2st<- decostand(dpa2, method="range", na.rm=T)
+    dpa3st<- decostand(dpa3, method="range", na.rm=T)
+    dpa4st<- decostand(dpa4, method="range", na.rm=T)
+    
     pbsim<- c(pbsim,pbetasim$beta.sim)
     pb0<- c(pb0, pbeta0$TD_beta)
     pb1<- c(pb1, pbeta1$TD_beta)
@@ -850,6 +961,7 @@ pwisedata_alphabeta<- data.frame(pwisedata,
                                  ha3_EP1, ha3_EP2,
                                  ha4_EP1, ha4_EP2,
                                  dha0, dha1, dha2, dha3, dha4,
+                                 dha0st, dha1st, dha2st, dha3st, dha4st,
                                  hbsim, hb0, hb1, hb2, hb3, hb4,
                                  pa0_EP1, pa0_EP2,
                                  pa1_EP1, pa1_EP2,
@@ -857,6 +969,7 @@ pwisedata_alphabeta<- data.frame(pwisedata,
                                  pa3_EP1, pa3_EP2,
                                  pa4_EP1, pa4_EP2,
                                  dpa0, dpa1, dpa2, dpa3, dpa4,
+                                 dpa0st, dpa1st, dpa2st, dpa3st, dpa4st,
                                  pbsim, pb0, pb1, pb2, pb3, pb4
 )
 

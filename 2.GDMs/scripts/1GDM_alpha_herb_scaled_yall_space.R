@@ -36,25 +36,6 @@ load("./data/InputData/pwise_space_herb.RData")
 # if the uploaded, assembled data files are used, upload the complete insect files
 # here.
 
-# Preparing datasets
-#
-# make sure distances are not <0, >1 --> restrict to a tiny bit >0 and <1 --> DO NOT SAVE this
-# vegan::decostand()
-pwise_space_herb$dha0st<- decostand(pwise_space_herb$dha0, method="range", na.rm=T)
-pwise_space_herb$dha1st<- decostand(pwise_space_herb$dha1, method="range", na.rm=T)
-pwise_space_herb$dha2st<- decostand(pwise_space_herb$dha2, method="range", na.rm=T)
-pwise_space_herb$dha3st<- decostand(pwise_space_herb$dha3, method="range", na.rm=T)
-pwise_space_herb$dha4st<- decostand(pwise_space_herb$dha4, method="range", na.rm=T)
-
-pwise_time_herb$dha0st<- decostand(pwise_time_herb$dha0abs, method="range", na.rm=T)
-pwise_time_herb$dha1st<- decostand(pwise_time_herb$dha1abs, method="range", na.rm=T)
-pwise_time_herb$dha2st<- decostand(pwise_time_herb$dha2abs, method="range", na.rm=T)
-pwise_time_herb$dha3st<- decostand(pwise_time_herb$dha3abs, method="range", na.rm=T)
-pwise_time_herb$dha4st<- decostand(pwise_time_herb$dha4abs, method="range", na.rm=T)
-
-pwise_space<- pwise_space_herb
-pwise_time<- pwise_time_herb
-
 # # # # # # # # # # # # # #
 # 1 - SPATIAL DATASET              ----
 #
