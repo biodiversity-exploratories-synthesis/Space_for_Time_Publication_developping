@@ -27,13 +27,15 @@ library(patchwork)
 # # # # #
 # 0.a. - DATA ----
 #
-#insects
-#load("./pwise_time_ayrs_in_new.RData")
 
-load("./sitepred_pwise_time_in_step3.RData")#new pwise_space with updated LUI residuals
+#set working directory to folder "2.GDM"
+#herbivores
+load("./data/InputData/pwise_time_herb.RData")
 
+pwise_time<- pwise_time_herb
 
-#TODO is there no part where the range is taken?
+# if the uploaded, assembled data files are used, upload the complete insect files
+# here.
 
 
 # # # # # # # # # # # # # #
@@ -297,87 +299,6 @@ for(i in 1:4){
 remove(dat, gdmTab, GDM)
 
 
-save(splines_her_yall_sc, file="splines_her_yall_sc_new.RData")
+save(splines_her_yall_sc, file="./data/OutputData/splines_her_yall_sc_new.RData")
 
-# # # # #
-# 2.5. -  PLOT ----
-# 
-load("./splines_her_yall_sc_new.RData")#see prep code above
-
-splines_her_yall_sc$beta_type<- as.factor(splines_her_yall_sc$beta_type)
-levels(splines_her_yall_sc$beta_type)
-
-# LUI
-p1<- ggplot(splines_her_yall_sc, aes(x=LUIx, y=LUIy, colour=beta_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 3), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Beta Diversity", labels=c("Turnover", "Turnover_25", "Chao 0",
-                                                           "Chao 1", "Chao 2",
-                                                           "Chao 3", "Chao 4"),l=50)+
-  xlab("LUI (scaled to EP average)")+
-  ylab("Effect of LUI differences on beta-diversity")+
-  ggtitle("a - Land use intensity (LUI)")+
-  #geom_text(aes(x = 3.5, y = 1.0, label = "EV% = 1.0"), color="black") + 
-  #geom_text(aes(x = 3.5, y = 0.8, label = "EV% = 1.3"),color="black") + 
-  #geom_text(aes(x = 3.5, y = 0.55, label = "EV% = 1.0"),color="black") + 
-  #geom_text(aes(x = 3.5, y = 0.35, label = "EV% = 0.4"),color="black") +
-  theme_classic()
-
-p1
-
-# Mowing
-p2<- ggplot(splines_her_yall_sc, aes(x=MOWx, y=MOWy, colour=beta_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 3), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Beta Diversity", labels=c("Turnover", "Turnover_25","Chao 0",
-                                                           "Chao 1", "Chao 2",
-                                                           "Chao 3", "Chao 4"),l=50)+
-  xlab("MOW (scaled to EP average)")+
-  ylab("Effect of MOW differences on beta-diversity")+
-  ggtitle("b - Mowing intensity (MOW)")+
-  #geom_text(aes(x = 3.3, y = 0.28, label = "EV% = 0.1"), color="black") + 
-  #geom_text(aes(x = 3, y = 0.21, label = "EV% = 0.2"),color="black") + 
-  #geom_text(aes(x = 3.5, y = 0.13, label = "EV% = 0.2"),color="black") + 
-  #geom_text(aes(x = 3.5, y = 0.09, label = "EV% = 0.1"),color="black") + 
-  theme_classic()
-p2
-
-# Grazing
-p3<- ggplot(splines_her_yall_sc, aes(x=GRAx, y=GRAy, colour=beta_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 3), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Beta Diversity", labels=c("Turnover",  "Turnover_25","Chao 0",
-                                                           "Chao 1", "Chao 2",
-                                                           "Chao 3", "Chao 4"
-                                                           ),l=50)+
-  xlab("GRA (scaled to EP average)")+
-  ylab("Effect of GRA differences on beta-diversity")+
-  ggtitle("c - Grazing intensity (GRA)")+
-  #geom_text(aes(x = 10, y = 0.22, label = "EV% = 0.5"), color="black") + 
-  #geom_text(aes(x = 10, y = 0.2, label = "EV% = 0.9"),color="black") + 
-  #geom_text(aes(x = 10, y = 0.185, label = "EV% = 1.0"),color="black") + 
-  #geom_text(aes(x = 10, y = 0.125, label = "EV% = 0.5"),color="black") + 
-  theme_classic()
-
-p3
-
-# Fertilisation
-p4<- ggplot(splines_her_yall_sc, aes(x=FERx, y=FERy, colour=beta_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 3), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Beta Diversity", labels=c("Turnover","Turnover_25", "Chao 0",
-                                                           "Chao 1", "Chao 2",
-                                                           "Chao 3", "Chao 4"),l=50)+
-  xlab("FER (scaled to EP average)")+
-  ylab("Effect of FER differences on beta-diversity")+
-  ggtitle("d - Fertilisation intensity (FER)")+
-  #geom_text(aes(x = 10.5, y = 0.44, label = "EV% = 0.5"), color="black") + 
-  #geom_text(aes(x = 10.5, y = 0.35, label = "EV% = 0.6"),color="black") + 
-  #geom_text(aes(x = 10.5, y = 0.19, label = "EV% = 0.3"),color="black") +
-  #geom_text(aes(x = 10.5, y = 0.12, label = "EV% = 0.2"),color="black") +
-  theme_classic()
-
-p4
-
-p1 + p2 + p3 + p4 + plot_layout(guides="collect")
-ggsave("ResultsPlots/her_yall_LUsplines_scaled.png")
+remove(pwise_time)

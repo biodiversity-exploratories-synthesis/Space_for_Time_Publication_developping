@@ -27,14 +27,14 @@ library(patchwork)
 # # # # #
 # 0.a. - DATA ----
 #
+#set working directory to folder "2.GDM"
 #plants
-#load("./pwise_space_new.RData")
-#TODO delete above?
-load("./sitepred_pwise_space_step3.RData")#new pwise_time with updated LUI residuals
+load("./data/InputData/pwise_space_plants.RData")
 
+pwise_space -> pwise_space_plants
+# if the uploaded, assembled data files are used, upload those files
+# here.
 
-
-#TODO is there no range correction for this dataset?
 
 
 
@@ -374,84 +374,4 @@ for(i in 1:4){
 }
 
 
-save(splines_plants_space_sc, file="splines_plants_space_sc_new.RData")
-
-
-# # # # #
-# 1.5. -  PLOT ----
-# 
-splines_plants_space_sc$beta_type<- as.factor(splines_plants_space_sc$beta_type)
-levels(splines_plants_space_sc$beta_type)
-
-load("./splines_plants_space_sc.RData")
-
-# LUI
-p1<- ggplot(splines_plants_space_sc, aes(x=LUIx, y=LUIy, colour=beta_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 3), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Beta Diversity", labels=c("Turnover", "Chao 0",
-                                                           "Chao 1", "Chao 2",
-                                                           "Chao 3", "Chao 4"),l=50)+
-  xlab("LUI (scaled to year average)")+
-  ylab("Effect of LUI differences on beta-diversity")+
-  ggtitle("a - Land use intensity (LUI)")+
-  #geom_text(aes(x = 3.8, y = 1.5, label = "EV% = 5.4"), color="black") + 
-  #geom_text(aes(x = 3.8, y = 1.1, label = "EV% = 7.5"),color="black") + 
-  #geom_text(aes(x = 3.8, y = 0.8, label = "EV% = 7.7"),color="black") + 
-  #geom_text(aes(x = 3.8, y = 0.5, label = "EV% = 4.2"),color="black") + 
-  theme_classic()
-p1
- 
-# MOW
-p2<- ggplot(splines_plants_space_sc, aes(x=MOWx, y=MOWy, colour=beta_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 3), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Beta Diversity",labels=c("Turnover", "Chao 0",
-                                                          "Chao 1", "Chao 2",
-                                                          "Chao 3", "Chao 4"), l=50)+
-  xlab("MOW (scaled to year average)")+
-  ylab("Effect of MOW differences on beta-diversity")+
-  ggtitle("b - Mowing intensity (MOW)")+
-  #geom_text(aes(x = 4.5, y = 0.20, label = "EV% = 1.1"), color="black") + 
-  #geom_text(aes(x = 4.5, y = 0.145, label = "EV% = 1.6"),color="black") + 
-  #geom_text(aes(x = 4.5, y = 0.123, label = "EV% = 2.1"),color="black") + 
-  #geom_text(aes(x = 4.5, y = 0.09, label = "EV% = 1.5"),color="black") + 
-  theme_classic()
-p2
-
-# Grazing
-p3<- ggplot(splines_plants_space_sc, aes(x=GRAx, y=GRAy, colour=beta_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 3), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Beta Diversity", labels=c("Turnover", "Chao 0",
-                                                           "Chao 1", "Chao 2",
-                                                           "Chao 3", "Chao 4"),l=50)+
-  xlab("GRA (scaled to year average)")+
-  ylab("Effect of GRA differences on beta-diversity")+
-  ggtitle("c - Grazing intensity (GRA)")+
-  #geom_text(aes(x = 11.5, y = 0.131, label = "EV% = 0.5"), color="black") + 
-  #geom_text(aes(x = 11.5, y = 0.080, label = "EV% = 0.4"),color="black") + 
-  #geom_text(aes(x = 11.5, y = 0.02, label = "EV% = 0.1"),color="black") + 
-  #geom_text(aes(x = 11.5, y = 0.03, label = "EV% = 0.2"),color="black") + 
-  theme_classic()
-p3
-
-# Fertilisation
-p4<- ggplot(splines_plants_space_sc, aes(x=FERx, y=FERy, colour=beta_type))+
-  geom_line(size=1.5)+
-  scale_y_sqrt(limits = c(0, 3), expand = c(0, 0))+
-  scale_colour_hue(name="Type of Beta Diversity", labels=c("Turnover", "Chao 0",
-                                                           "Chao 1", "Chao 2",
-                                                           "Chao 3", "Chao 4"),l=50)+
-  xlab("FER (scaled to year average)")+
-  ylab("Effect of FER differences on beta-diversity")+
-  ggtitle("d - Fertilisation intensity (FER)")+
-  #geom_text(aes(x = 11, y = 0.055, label = "EV% = 0.3"), color="black") + 
-  #geom_text(aes(x = 11, y = 0.032, label = "EV% = 0.2"),color="black") + 
-  #geom_text(aes(x = 11, y = 0.02, label = "EV% = 0.1"),color="black") + 
-  #geom_text(aes(x = 11, y = 0.007, label = "EV% = 0.1"),color="black") + 
-  theme_classic()
-p4
-
-p1 + p2 + p3 + p4 + plot_layout(guides="collect")
-ggsave("ResultsPlots/plant_space_LUsplines_scaled.png")
+save(splines_plants_space_sc, file="./data/OutputData/splines_plants_space_sc_new.RData")
