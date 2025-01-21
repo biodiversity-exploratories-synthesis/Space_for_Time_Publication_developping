@@ -1,11 +1,20 @@
 ######################################################
-#       GDM p-values for insect predivores (space and time)
-#
+#       GDM p-values for insect secondary consumers/predators (space and time)
+######### differences in alpha diversity ########
 ######################################################
 
-# data
-load("./pwise_space_in_new.RData")
-load("./pwise_time_ayrs_in_new.RData")
+# set working directory to folder "Space_for_Time_Publication"
+
+# upload data
+# secondary consumers/predators
+load("./2.GDMs/data/InputData/pwise_time_pred.RData")
+load("./2.GDMs/data/InputData/pwise_space_pred.RData")
+
+pwise_time_ayrs_in<- pwise_time_pred
+pwise_space_in<- pwise_space_pred
+
+# if the uploaded, assembled data files are used, upload the complete insect files
+# here.
 
 
 # packages
@@ -15,8 +24,8 @@ library(data.table)
 library(vegan)
 
 # edited var.Imp function
-source("GDM/gdm.varIMP_edit.R")
-source("GDM/matrix_perm_permutateSitePair.R")
+source("RFunctions/gdm.varIMP_edit.R")
+source("RFunctions/matrix_perm_permutateSitePair.R")
 
 pwise_space_in$dpa0st <- decostand(pwise_space_in$dpa0, method = "range", na.rm = T)
 pwise_space_in$dpa1st <- decostand(pwise_space_in$dpa1, method = "range", na.rm = T)
@@ -90,7 +99,7 @@ for (i in 1:4) {
 
 names(var_pred_b0) <- LU
 var_pred_a0s_sc <- var_pred_b0
-save(var_pred_a0s_sc, file = "var_pred_a0s_sc.RData")
+save(var_pred_a0s_sc, file = "./2.GDMs/data/OutputData/var_pred_a0s_sc.RData")
 
 
 # a1
@@ -145,7 +154,7 @@ for (i in 1:4) {
 
 names(var_pred_b1) <- LU
 var_pred_a1s_sc <- var_pred_b1
-save(var_pred_a1s_sc, file = "var_pred_a1s_sc.RData")
+save(var_pred_a1s_sc, file = "./2.GDMs/data/OutputData/var_pred_a1s_sc.RData")
 
 
 
@@ -200,7 +209,7 @@ for (i in 1:4) {
 
 names(var_pred_b2) <- LU
 var_pred_a2s_sc <- var_pred_b2
-save(var_pred_a2s_sc, file = "var_pred_a2s_sc.RData")
+save(var_pred_a2s_sc, file = "./2.GDMs/data/OutputData/var_pred_a2s_sc.RData")
 
 
 
@@ -255,7 +264,7 @@ for (i in 1:4) {
 
 names(var_pred_b3) <- LU
 var_pred_a3s_sc <- var_pred_b3
-save(var_pred_a3s_sc, file = "var_pred_a3s_sc.RData")
+save(var_pred_a3s_sc, file = "./2.GDMs/data/OutputData/var_pred_a3s_sc.RData")
 
 
 
@@ -311,7 +320,7 @@ for (i in 1:4) {
 names(var_pred_b4) <- LU
 
 var_pred_a4s_sc <- var_pred_b4
-save(var_pred_a4s_sc, file = "var_pred_a4s_sc.RData")
+save(var_pred_a4s_sc, file = "./2.GDMs/data/OutputData/var_pred_a4s_sc.RData")
 
 
 #############################################################################
@@ -377,7 +386,7 @@ for (i in 1:4) {
 
 names(var_pred_b0t) <- LU
 var_pred_a0t_sc <- var_pred_b0t
-save(var_pred_a0t_sc, file = "var_pred_a0t_sc.RData")
+save(var_pred_a0t_sc, file = "./2.GDMs/data/OutputData/var_pred_a0t_sc.RData")
 
 
 
@@ -433,7 +442,7 @@ for (i in 1:4) {
 
 names(var_pred_b1t) <- LU
 var_pred_a1t_sc <- var_pred_b1t
-save(var_pred_a1t_sc, file = "var_pred_a1t_sc.RData")
+save(var_pred_a1t_sc, file = "./2.GDMs/data/OutputData/var_pred_a1t_sc.RData")
 
 
 
@@ -490,7 +499,7 @@ for (i in 1:4) {
 
 names(var_pred_b2t) <- LU
 var_pred_a2t_sc <- var_pred_b2t
-save(var_pred_a2t_sc, file = "var_pred_a2t_sc.RData")
+save(var_pred_a2t_sc, file = "./2.GDMs/data/OutputData/var_pred_a2t_sc.RData")
 
 
 # a3
@@ -546,7 +555,7 @@ for (i in 1:4) {
 
 names(var_pred_b3t) <- LU
 var_pred_a3t_sc <- var_pred_b3t
-save(var_pred_a3t_sc, file = "var_pred_a3t_sc.RData")
+save(var_pred_a3t_sc, file = "./2.GDMs/data/OutputData/var_pred_a3t_sc.RData")
 
 
 # a4
@@ -603,4 +612,7 @@ for (i in 1:4) {
 
 names(var_pred_b4t) <- LU
 var_pred_a4t_sc <- var_pred_b4t
-save(var_pred_a4t_sc, file = "var_pred_a4t_sc.RData")
+save(var_pred_a4t_sc, file = "./2.GDMs/data/OutputData/var_pred_a4t_sc.RData")
+
+remove(pwise_space_in, pwise_time_ayrs_in)
+

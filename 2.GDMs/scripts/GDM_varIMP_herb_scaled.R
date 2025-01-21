@@ -1,11 +1,21 @@
 ######################################################
 #       GDM p-values for insect herbivores (space and time)
+####      beta diversity #######
 #
 ######################################################
 
-# data
-load("./pwise_space_in_new.RData")
-load("./pwise_time_ayrs_in_new.RData")
+# set working directory to folder "Space_for_Time_Publication"
+
+# upload data
+# herbivores
+load("./2.GDMs/data/InputData/pwise_time_herb.RData")
+load("./2.GDMs/data/InputData/pwise_space_herb.RData")
+
+pwise_time_ayrs_in<- pwise_time_herb
+pwise_space_in<- pwise_space_herb
+
+# if the uploaded, assembled data files are used, upload the complete insect files
+# here.
 
 ##### data prep
 #######
@@ -48,8 +58,8 @@ library(gdm)
 library(data.table)
 
 # edited var.Imp function
-source("GDM/gdm.varIMP_edit.R")
-source("GDM/matrix_perm_permutateSitePair.R")
+source("/RFunctions/gdm.varIMP_edit.R")
+source("/RFunctions/matrix_perm_permutateSitePair.R")
 
 
 # GDMs space
@@ -115,7 +125,7 @@ for (i in 1:4) {
 
 names(var_herb_b0) <- LU
 var_herb_b0s_sc <- var_herb_b0
-save(var_herb_b0s_sc, file = "var_herb_b0s_sc.RData")
+save(var_herb_b0s_sc, file = "./2.GDMs/data/OutputData/var_herb_b0s_sc.RData")
 
 
 # b1
@@ -185,7 +195,7 @@ for (i in 1:4) {
 
 names(var_herb_b1) <- LU
 var_herb_b1_sc <- var_herb_b1
-save(var_herb_b1_sc, file = "var_herb_b1_sc.RData")
+save(var_herb_b1_sc, file = "./2.GDMs/data/OutputData/var_herb_b1_sc.RData")
 
 
 
@@ -255,7 +265,7 @@ for (i in 1:4) {
 
 names(var_herb_b2) <- LU
 var_herb_b2_sc <- var_herb_b2
-save(var_herb_b2_sc, file = "var_herb_b2_sc.RData")
+save(var_herb_b2_sc, file = "./2.GDMs/data/OutputData/var_herb_b2_sc.RData")
 
 
 # b3
@@ -324,7 +334,7 @@ for (i in 1:4) {
 
 names(var_herb_b3) <- LU
 var_herb_b3_sc <- var_herb_b3
-save(var_herb_b3_sc, file = "var_herb_b3_sc.RData")
+save(var_herb_b3_sc, file = "./2.GDMs/data/OutputData/var_herb_b3_sc.RData")
 
 
 # b4
@@ -393,7 +403,7 @@ for (i in 1:4) {
 
 names(var_herb_b4) <- LU
 var_herb_b4_sc <- var_herb_b4
-save(var_herb_b4_sc, file = "var_herb_b4_sc.RData")
+save(var_herb_b4_sc, file = "./2.GDMs/data/OutputData/var_herb_b4_sc.RData")
 
 
 # bsim
@@ -462,7 +472,7 @@ for (i in 1:4) {
 
 names(var_herb_bsim) <- LU
 var_herb_bsim_sc <- var_herb_bsim
-save(var_herb_bsim_sc, file = "var_herb_bsim_sc.RData")
+save(var_herb_bsim_sc, file = "./2.GDMs/data/OutputData/var_herb_bsim_sc.RData")
 
 
 #############################################################################
@@ -529,7 +539,7 @@ for (i in 1:4) {
 
 names(var_herb_b0t) <- LU
 var_herb_b0t_sc <- var_herb_b0t
-save(var_herb_b0t_sc, file = "var_herb_b0t_sc.RData")
+save(var_herb_b0t_sc, file = "./2.GDMs/data/OutputData/var_herb_b0t_sc.RData")
 
 
 
@@ -586,7 +596,7 @@ for (i in 1:4) {
 
 names(var_herb_b1t) <- LU
 var_herb_b1t_sc <- var_herb_b1t
-save(var_herb_b1t_sc, file = "var_herb_b1t_sc.RData")
+save(var_herb_b1t_sc, file = "./2.GDMs/data/OutputData/var_herb_b1t_sc.RData")
 
 
 
@@ -643,7 +653,7 @@ for (i in 1:4) {
 
 names(var_herb_b2t) <- LU
 var_herb_b2t_sc <- var_herb_b2t
-save(var_herb_b2t_sc, file = "var_herb_b2t_sc.RData")
+save(var_herb_b2t_sc, file = "./2.GDMs/data/OutputData/var_herb_b2t_sc.RData")
 
 
 # b3
@@ -700,7 +710,7 @@ for (i in 1:4) {
 
 names(var_herb_b3t) <- LU
 var_herb_b3t_sc <- var_herb_b3t
-save(var_herb_b3t_sc, file = "var_herb_b3t_sc.RData")
+save(var_herb_b3t_sc, file = "./2.GDMs/data/OutputData/var_herb_b3t_sc.RData")
 
 
 # b4
@@ -756,7 +766,7 @@ for (i in 1:4) {
 
 names(var_herb_b4t) <- LU
 var_herb_b4t_sc <- var_herb_b4t
-save(var_herb_b4t_sc, file = "var_herb_b4t_sc.RData")
+save(var_herb_b4t_sc, file = "./2.GDMs/data/OutputData/var_herb_b4t_sc.RData")
 
 
 # bsim
@@ -812,4 +822,6 @@ for (i in 1:4) {
 
 names(var_herb_bsimt) <- LU
 var_herb_bsimt_sc <- var_herb_bsimt
-save(var_herb_bsimt_sc, file = "var_herb_bsimt_sc.RData")
+save(var_herb_bsimt_sc, file = "./2.GDMs/data/OutputData/var_herb_bsimt_sc.RData")
+
+remove(pwise_space_in, pwise_time_ayrs_in)

@@ -2,10 +2,18 @@
 #       GDM p-values for insect herbivores (space and time)
 #       #### differences in alpha diversity #######
 ######################################################
+# set working directory to folder "Space_for_Time_Publication"
 
-# data
-load("./pwise_space_in_new.RData")
-load("./pwise_time_ayrs_in_new.RData")
+# upload data
+# herbivores
+load("./2.GDMs/data/InputData/pwise_time_herb.RData")
+load("./2.GDMs/data/InputData/pwise_space_herb.RData")
+
+pwise_time_ayrs_in<- pwise_time_herb
+pwise_space_in<- pwise_space_herb
+
+# if the uploaded, assembled data files are used, upload the complete insect files
+# here.
 
 # packages
 library(tidyverse)
@@ -15,8 +23,8 @@ library(vegan)
 
 
 # edited var.Imp function
-source("GDM/gdm.varIMP_edit.R")
-source("GDM/matrix_perm_permutateSitePair.R")
+source("./RFunctions/gdm.varIMP_edit.R")
+source("/RFunctions/matrix_perm_permutateSitePair.R")
 
 #############################
 #############################
@@ -84,7 +92,7 @@ for (i in 1:4) {
 names(var_herb_b0) <- LU
 var_herb_a0s_sc <- var_herb_b0
 rm(var_herb_b0)
-save(var_herb_a0s_sc, file = "var_herb_a0s_sc.RData")
+save(var_herb_a0s_sc, file = "./2.GDMs/data/OutputData/var_herb_a0s_sc.RData")
 
 
 # a1
@@ -139,7 +147,7 @@ for (i in 1:4) {
 
 names(var_herb_b1) <- LU
 var_herb_a1s_sc <- var_herb_b1
-save(var_herb_a1s_sc, file = "var_herb_a1s_sc.RData")
+save(var_herb_a1s_sc, file = "./2.GDMs/data/OutputData/var_herb_a1s_sc.RData")
 
 
 
@@ -194,7 +202,7 @@ for (i in 1:4) {
 
 names(var_herb_b2) <- LU
 var_herb_a2s_sc <- var_herb_b2
-save(var_herb_a2s_sc, file = "var_herb_a2s_sc.RData")
+save(var_herb_a2s_sc, file = "./2.GDMs/data/OutputData/var_herb_a2s_sc.RData")
 
 
 
@@ -250,7 +258,7 @@ for (i in 1:4) {
 
 names(var_herb_b3) <- LU
 var_herb_a3s_sc <- var_herb_b3
-save(var_herb_a3s_sc, file = "var_herb_a3s_sc.RData")
+save(var_herb_a3s_sc, file = "./2.GDMs/data/OutputData/var_herb_a3s_sc.RData")
 
 # b4
 # list for results
@@ -308,7 +316,7 @@ for (i in 1:4) {
 names(var_herb_b4) <- LU
 
 var_herb_a4s_sc <- var_herb_b4
-save(var_herb_a4s_sc, file = "var_herb_a4s_sc.RData")
+save(var_herb_a4s_sc, file = "./2.GDMs/data/OutputData/var_herb_a4s_sc.RData")
 
 
 #############################################################################
@@ -321,14 +329,14 @@ LU1 <- c("LUI1res", "MOW1res", "GRA1res", "FER1res")
 LU2 <- c("LUI2res", "MOW2res", "GRA2res", "FER2res")
 
 
-# b0
+# a0
 # list for results
 var_herb_b0t <- list()
 
 for (i in 1:4) {
   attach(pwise_time_ayrs_in)
 
-  # geo dist, LUI and dummy as herbictors
+  # geo dist, LUI and dummy as predictors
   dat <- data.frame(
     dha0st,
     rep(1, nrow(pwise_time_ayrs_in)),
@@ -377,11 +385,11 @@ for (i in 1:4) {
 
 names(var_herb_b0t) <- LU
 var_herb_a0t_sc <- var_herb_b0t
-save(var_herb_a0t_sc, file = "var_herb_a0t_sc.RData")
+save(var_herb_a0t_sc, file = "./2.GDMs/data/OutputData/var_herb_a0t_sc.RData")
 
 
 
-# b1
+# a1
 # list for results
 var_herb_b1t <- list()
 
@@ -436,11 +444,11 @@ for (i in 1:4) {
 
 names(var_herb_b1t) <- LU
 var_herb_a1t_sc <- var_herb_b1t
-save(var_herb_a1t_sc, file = "var_herb_a1t_sc.RData")
+save(var_herb_a1t_sc, file = "./2.GDMs/data/OutputData/var_herb_a1t_sc.RData")
 
 
 
-# b2
+# a2
 # list for results
 var_herb_b2t <- list()
 
@@ -495,10 +503,10 @@ for (i in 1:4) {
 
 names(var_herb_b2t) <- LU
 var_herb_a2t_sc <- var_herb_b2t
-save(var_herb_a2t_sc, file = "var_herb_a2t_sc.RData")
+save(var_herb_a2t_sc, file = "./2.GDMs/data/OutputData/var_herb_a2t_sc.RData")
 
 
-# b3
+# a3
 # list for results
 var_herb_b3t <- list()
 
@@ -551,7 +559,7 @@ for (i in 1:4) {
 
 names(var_herb_b3t) <- LU
 var_herb_a3t_sc <- var_herb_b3t
-save(var_herb_a3t_sc, file = "var_herb_a3t_sc.RData")
+save(var_herb_a3t_sc, file = "./2.GDMs/data/OutputData/var_herb_a3t_sc.RData")
 
 
 
@@ -608,4 +616,6 @@ for (i in 1:4) {
 
 names(var_herb_b4t) <- LU
 var_herb_a4t_sc <- var_herb_b4t
-save(var_herb_a4t_sc, file = "var_herb_a4t_sc.RData")
+save(var_herb_a4t_sc, file = "./2.GDMs/data/OutputData/var_herb_a4t_sc.RData")
+
+remove(pwise_space_in, pwise_time_ayrs_in)

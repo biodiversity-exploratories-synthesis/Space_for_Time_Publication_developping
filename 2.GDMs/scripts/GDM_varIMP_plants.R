@@ -1,27 +1,18 @@
 ######################################################
-#       GDM p-values for plants betadiversity (space and time)
+#       GDM p-values for plants beta diversity (space and time)
 #
 ######################################################
-# script output
-# 12 lists
-#   space dataset
-# save(var_plants_b0_sub, file="var_plants_b0_sub.RData")
-# save(var_plants_b1, file="var_plants_b1.RData")
-# save(var_plants_b2, file="var_plants_b2.RData")
-# save(var_plants_b3, file="var_plants_b3.RData")
-# save(var_plants_b4, file="var_plants_b4.RData")
-# save(var_plants_bsim, file="var_plants_bsim.RData")
-#   time dataset
-# save(var_plants_b0t, file="var_plants_b0t.RData")
-# save(var_plants_b1t, file="var_plants_b1t.RData")
-# save(var_plants_b2t, file="var_plants_b2t.RData")
-# save(var_plants_b3t, file="var_plants_b3t.RData")
-# save(var_plants_b4t, file="var_plants_b4t.RData")
-# save(var_plants_bsimt, file="var_plants_bsimt.RData")
+# set working directory to folder "Space_for_Time_Publication"
+# upload data
+# plants
+load("./2.GDMs/data/InputData/pwise_time_plants.RData")
+load("./2.GDMs/data/InputData/pwise_space_plants.RData")
 
-# data
-load("./pwise_space_new.RData")
-load("./pwise_time_ayrs_new.RData")
+pwise_time_ayrs<- pwise_time_plants
+pwise_space<- pwise_space_plants
+
+# if the uploaded, assembled data files are used, upload the complete insect files
+# here.
 
 # packages
 library(tidyverse)
@@ -29,8 +20,8 @@ library(gdm)
 library(data.table)
 
 # edited var.Imp function
-source("GDM/gdm.varIMP_edit.R")
-source("GDM/matrix_perm_permutateSitePair.R")
+source("./RFunctions/gdm.varIMP_edit.R")
+source("RFunctions/matrix_perm_permutateSitePair.R")
 
 
 # GDMs space
@@ -92,7 +83,7 @@ for (i in 1:4) {
 }
 
 names(var_plants_b0_sub) <- LU
-save(var_plants_b0_sub, file = "var_plants_b0_sub.RData")
+save(var_plants_b0_sub, file = "./2.GDMs/data/OutputData/var_plants_b0_sub.RData")
 
 
 
@@ -148,7 +139,7 @@ for (i in 1:4) {
 
 names(var_plants_b1) <- LU
 
-save(var_plants_b1, file = "var_plants_b1.RData")
+save(var_plants_b1, file = "./2.GDMs/data/OutputData/var_plants_b1.RData")
 
 
 # b2
@@ -204,7 +195,7 @@ for (i in 1:4) {
 
 names(var_plants_b2) <- LU
 
-save(var_plants_b2, file = "var_plants_b2.RData")
+save(var_plants_b2, file = "./2.GDMs/data/OutputData/var_plants_b2.RData")
 
 # b3
 var_plants_b3 <- list()
@@ -258,7 +249,7 @@ for (i in 1:4) {
 }
 
 names(var_plants_b3) <- LU
-save(var_plants_b3, file = "var_plants_b3.RData")
+save(var_plants_b3, file = "./2.GDMs/data/OutputData/var_plants_b3.RData")
 
 
 # b4
@@ -315,7 +306,7 @@ for (i in 1:4) {
 }
 
 names(var_plants_b4) <- LU
-save(var_plants_b4, file = "var_plants_b4.RData")
+save(var_plants_b4, file = "./2.GDMs/data/OutputData/var_plants_b4.RData")
 
 
 # bsim
@@ -373,7 +364,7 @@ end.time <- Sys.time()
 
 names(var_plants_bsim) <- LU
 
-save(var_plants_bsim, file = "var_plants_bsim.RData")
+save(var_plants_bsim, file = "./2.GDMs/data/OutputData/var_plants_bsim.RData")
 
 
 #############################################################################
@@ -438,7 +429,7 @@ for (i in 1:4) {
 }
 
 names(var_plants_b0t) <- LU
-save(var_plants_b0t, file = "var_plants_b0t.RData")
+save(var_plants_b0t, file = "./2.GDMs/data/OutputData/var_plants_b0t.RData")
 
 
 
@@ -497,7 +488,7 @@ for (i in 1:4) {
 
 names(var_plants_b1t) <- LU
 
-save(var_plants_b1t, file = "var_plants_b1t.RData")
+save(var_plants_b1t, file = "./2.GDMs/data/OutputData/var_plants_b1t.RData")
 
 
 # b2
@@ -556,7 +547,7 @@ for (i in 1:4) {
 
 names(var_plants_b2t) <- LU
 
-save(var_plants_b2t, file = "var_plants_b2t.RData")
+save(var_plants_b2t, file = "./2.GDMs/data/OutputData/var_plants_b2t.RData")
 
 # b3
 var_plants_b3t <- list()
@@ -613,7 +604,7 @@ for (i in 1:4) {
 
 names(var_plants_b3t) <- LU
 
-save(var_plants_b3t, file = "var_plants_b3t.RData")
+save(var_plants_b3t, file = "./2.GDMs/data/OutputData/var_plants_b3t.RData")
 
 # b4
 var_plants_b4t <- list()
@@ -671,7 +662,7 @@ for (i in 1:4) {
 
 names(var_plants_b4t) <- LU
 
-save(var_plants_b4t, file = "var_plants_b4t.RData")
+save(var_plants_b4t, file = "./2.GDMs/data/OutputData/var_plants_b4t.RData")
 
 # bsim
 var_plants_bsimt <- list()
@@ -731,4 +722,6 @@ end.time <- Sys.time()
 
 names(var_plants_bsimt) <- LU
 
-save(var_plants_bsimt, file = "var_plants_bsimt.RData")
+save(var_plants_bsimt, file = "./2.GDMs/data/OutputData/var_plants_bsimt.RData")
+
+remove(pwise_space, pwise_time_ayrs)
