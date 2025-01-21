@@ -582,17 +582,12 @@ pwisedata_alphabeta<- data.frame(pwisedata,
 )
 
 #reduce dataset to only those combination for which diversity estimates are there
-
-# DONE Noelle --
 # some of the combinations do not exist, because no data was collected in some
 #   of the years. Exclude those cases.
 # 42 length (21 * 2, because individually for herbivores and predators)
 div_names <- grep("a[0-9]_|ha[0-9]|hb[0-9]|bsim|[ab][0-4]", names(pwisedata_alphabeta), value = T)
 # find rows with 21 * 2 NA values (all diversity indices are NA)
 
-#TODO @Lena : ok to do like that? Could also say remove the comparisons where 
-#   EITHER herb OR pred are all missing. --> would get the same set of comparisons for pred and herb
-#
 # individually assessed predator and herbivore.
 #       for predators : removed rows where all diversity indices of predators are NA (ignoring what happens with herbivores)
 #       for herbivores : remove rows where all diversity indices of predators are NA (ignoring what happens with predators)
@@ -902,8 +897,39 @@ pwise_time_pred <- pwise_time_pred[, which(!colnames(pwise_time_pred) %in% grep(
 #save
 save(pwise_time_herb, file="data/OutputData/pwise_time_herb.RData")
 save(pwise_time_pred, file="data/OutputData/pwise_time_pred.RData")
-#TODO @Lena : rename if wanted
-# -- DONE Noelle
+
+#################################
+#save all data to analysis and figures folders
+
+#GDM Analysis - set first working directory to folder"2.GDM" then save
+save(pwise_time_plants, file="data/InputData/pwise_time_plants.RData")
+save(pwise_time_herb, file="data/InputData/pwise_time_herb.RData")
+save(pwise_time_pred, file="data/InputData/pwise_time_pred.RData")
+
+save(pwise_space_plants, file="data/InputData/pwise_space_plants.RData")
+save(pwise_space_herb, file="data/InputData/pwise_space_herb.RData")
+save(pwise_space_pred, file="data/InputData/pwise_space_pred.RData")
+
+#LM Analysis - set first working directory to folder"3.LM" then save
+save(pwise_time_plants, file="data/InputData/pwise_time_plants.RData")
+save(pwise_time_herb, file="data/InputData/pwise_time_herb.RData")
+save(pwise_time_pred, file="data/InputData/pwise_time_pred.RData")
+
+save(pwise_space_plants, file="data/InputData/pwise_space_plants.RData")
+save(pwise_space_herb, file="data/InputData/pwise_space_herb.RData")
+save(pwise_space_pred, file="data/InputData/pwise_space_pred.RData")
+
+
+#Figures - set first working directory to folder"4.Plotting Results" then save
+save(pwise_time_plants, file="data/InputData/pwise_time_plants.RData")
+save(pwise_time_herb, file="data/InputData/pwise_time_herb.RData")
+save(pwise_time_pred, file="data/InputData/pwise_time_pred.RData")
+
+save(pwise_space_plants, file="data/InputData/pwise_space_plants.RData")
+save(pwise_space_herb, file="data/InputData/pwise_space_herb.RData")
+save(pwise_space_pred, file="data/InputData/pwise_space_pred.RData")
+
+
 
 rm(pwisedata_alphabeta)
 rm(pwisedata)
