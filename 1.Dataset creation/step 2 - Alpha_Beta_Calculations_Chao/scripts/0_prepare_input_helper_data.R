@@ -17,14 +17,15 @@
 
 install.packages("reshape2") 
 library(reshape2) 
-	
-# replace  the path by the path to the folder where your data are stored
-#TODO - update to github location
+
+# set working directory to folder "step 2 - Alpha_Beta_Calculations_Chao"
+
+# replace path name to the folder "step 2 - Alpha_Beta_Calculations_Chao" 
 mypath<-"C:/Users/Lenovo/Documents/R/space_time_pairwise_HOME" 
 	
 # open your data
 # replace with the correct file name and delimiter 	
-plant<-read.table(paste(mypath,"plants_long.txt",sep="/"),h=T, sep=";") 
+plant<-read.table(paste(mypath,"data/RawData/plants_long.txt",sep="/"),h=T, sep=";") 
 	
 # build the crossed table
 # replace the parameters with the appropriate variables regarding your file
@@ -33,7 +34,7 @@ plant<-read.table(paste(mypath,"plants_long.txt",sep="/"),h=T, sep=";")
 plants_short<-dcast(plant,PlotID+Year+EP_PlotID+Useful_EP_PlotID~Species,value.var="Cover") 
 
 # save table
-save(plants_short, file="2.Alpha_Beta_Calculations_Chao/plants_short.RData")
+save(plants_short, file="data/InputData/plants_short.RData")
 
 #create column with combined plot year pairs (should be the same in environmental dataplot), ideally usefulEPPlotId.year
 #should work with the function (interaction)
@@ -53,7 +54,7 @@ plants_complete[plants_complete == 0.5]<- 1
 plants_rd<- plants_complete						      
                                                           
 #save data
-save(plants_rd, file="2.Alpha_Beta_Calculations_Chao/output/plants_rd.RData")
+save(plants_rd, file="data/InputData/plants_rd.RData")
 
 
 # # # # # # # # # # # # # #
@@ -61,19 +62,18 @@ save(plants_rd, file="2.Alpha_Beta_Calculations_Chao/output/plants_rd.RData")
 
 # Code preparing the abundance dataset for insects for pairwise diversity calculations
 
-#TODO - update to github location
+# replace path name to the folder "step 2 - Alpha_Beta_Calculations_Chao" 
 mypath<-"C:/Users/Lenovo/Documents/R/space_time_pairwise_HOME" 
 
 # open your data
 # replace with the correct file name and delimiter 
 
-# insect dataset (abudances): dataset 21969 (this has 2 data files the abundance datafile, inabun_long and the file which plots to explude (insect_exclude)
+# insect dataset (abudances): dataset 21969 (this has 2 data files the abundance data file, inabun_long and the file which plots to explude (insect_exclude)
 							      
 # opening the txt files does not work, because R does not detect the sep = "" correctly
 # alternative: transform to csv in excel and upload csv
 
-#insect<-read.table(paste(mypath,"inabun_long.txt",sep="/"),h=T, sep=";")
-insect<-read.csv(paste(mypath,"inabun_long.txt",sep="/"),h=T, sep=";")							
+insect<-read.csv(paste(mypath,"data/RawData/inabun_long.txt",sep="/"),h=T, sep=";")							
 							      
 #dataprep - long to short format
 #data in long format - transformation into short format
@@ -105,7 +105,7 @@ inabun_short<- reshape2::dcast(inabun_long, Exploratory + EP + CollectionYear + 
 inex<- read.csv("insect_exclude.csv", header=T, sep=";") 
 inabun_short<- inabun_short[!inabun_short$EPYear %in% inex$EPYear,]
 
-save(inabun_short, file="2.Alpha_Beta_Calculations_Chao/output/inabun_short.RData")
+save(inabun_short, file="data/InputData/inabun_short.RData")
 							      
 # 1.1. HERBIVORES              ----
 #
@@ -119,10 +119,9 @@ save(inabun_short, file="2.Alpha_Beta_Calculations_Chao/output/inabun_short.RDat
 #Comment by CP: This is an updated and more complete version of datasets 21726 and 25646.
 #This dataset is connected to dataset 27707 (raw abundance/presence-absence) by the "Species" column.
 
-#TODO@Noelle: use right code to assess Bexis dataset. Or do we need to download it anyway?
-insect_traits<- read.csv(...)
 
-#insect_traits<- read.csv("insect_traits.csv", header=T, sep=";", dec=".")
+# adjust to file name of the above mentioned traits data set (Bexis id 27706)
+insect_traits<-read.csv(paste(mypath,"data/RawData/insect_traits.txt",sep="/"),h=T, sep=";")		
 
 insect_traits <- insect_traits[insect_traits$Species %in% inabun_long$Species,]
 
@@ -139,7 +138,7 @@ herb <- inabun_short[,colnames(inabun_short) %in% herbsp$Species]
 rownames(herb)<- inabun_short$EPYear
 herb<- herb[, colSums(herb)>0] # only include columns with data
 
-save(herb, file="2.Alpha_Beta_Calculations_Chao/output/herb.RData")
+save(herb, file="data/InputData//herb.RData")
 
 rm(herb, herbsp, inabun_long, inabun_short, insect_traits)
 
@@ -160,4 +159,4 @@ rownames(pred)<- inabun_short$EPYear
 
 pred <- pred[, colSums(pred)>0]# only include columns with data
 
-save(pred, file="2.Alpha_Beta_Calculations_Chao/output/pred.RData")
+save(pred, file="data/InputData/pred.RData")

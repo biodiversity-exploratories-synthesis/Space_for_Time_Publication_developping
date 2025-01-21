@@ -187,3 +187,6 @@ pwise_space$drain<- (pwise_space$precip_raindays1 - pwise_space$precip_raindays2
 
 save(pwise_space, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/output/pwise_space.RData")
 save(pwise_time, file="1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/output/pwise_time.RData")
+
+save(pwise_space, file="1.Dataset creation/step 2 - Alpha_Beta_Calculations_Chao/RawData/pwise_space.RData")
+save(pwise_time, file="1.Dataset creation/step 2 - Alpha_Beta_Calculations_Chao/RawData/pwise_time.RData")
