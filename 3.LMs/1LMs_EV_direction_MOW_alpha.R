@@ -1,137 +1,24 @@
 #load data - too large to load all at once
-#load("./pwise_space_plants_new.RData")
-#load("./pwise_time_ayrs_new.RData")
-load("./sitepred_pwise_space_step3.RData")#new pwise_plants_space with updated MOW residuals
-load("./sitepred_pwise_time_step3.RData")#new pwise_plants_space with updated MOW residuals
+# # # # # # # # # # # # # # #  # # # #
+#                                    #
+#             FIT LMs                # 
+#         alpha DIVERSITY            #
+#     land use = Mowing              # 
+#                                    #
+# # # # # # # # # # # # # # #  # # # #
+#
+# spatial and temporal dataset within this script
 
-pwise_time_plants<-as.data.frame(pwise_time) #new names as RData files
-pwise_space_plants<-as.data.frame(pwise_space) #new names as RData files
-
-rm(pwise_space)
-rm(pwise_time)
-
-#insects
-#NB - both plant and insects files have the same names--> add org name to files
-#load("./pwise_plants_space_in_new.RData")
-#load("./pwise_time_ayrs_in_new.RData")
-load("./sitepred_pwise_space_in_step3.RData")#new pwise_plants_space with updated MOW residuals
-load("./sitepred_pwise_time_in_step3.RData")#new pwise_plants_space with updated MOW residuals
-
-pwise_time_insects<-as.data.frame(pwise_time) #new names as RData files
-pwise_space_insects<-as.data.frame(pwise_space) #new names as RData files
-
-rm(pwise_space)
-rm(pwise_time)
-
-#geo dist for the insect datasets - DONE
-a2<- ((pwise_space_insects$HWG2-pwise_space_insects$HWG1))^2
-b2<- ((pwise_space_insects$RWG2-pwise_space_insects$RWG1))^2
-
-pwise_space_insects$geo.dist<- sqrt((a2+b2))
-
-a2<- ((pwise_time_insects$HWG2-pwise_time_insects$HWG1))^2
-b2<- ((pwise_time_insects$RWG2-pwise_time_insects$RWG1))^2
-
-pwise_time_insects$geo.dist<- sqrt((a2+b2))
-
-save(pwise_space_insects, file="pwise_space_insects_new.RData")
-save(pwise_time_insects, file="pwise_time_insects_new.RData")
+# # # # # # # # # # # # # #
+# CONTENT                  ----
+# AIM : Fit LM models of beta diversity, for time and space datasets.
 
 
-#coordinates -not needed anymore
-pwise_time_insects$HWG1<- pwise_time_insects$HWG
-pwise_time_insects$RWG1<- pwise_time_insects$RWG
-
-colnames(pwise_time_insects)[8]<- "HWG"
-colnames(pwise_time_insects)[8]
-
-colnames(pwise_time_insects)[10]<- "RWG"
-colnames(pwise_time_insects)[10]
-
-RWG<- c()
-
-for(i in 1:8250) {
-  rwg<-pwise_space_plants$RWG1[pwise_space_plants$EP1 %in% pwise_time_plants$EP[i]]
-  RWG<- c(RWG, rwg[1])}
-RWG[1:57]
-pwise_time_plants$RWG<- RWG
-colnames(pwise_time_plants)[3]<- "HWG"
-
-#meanMOW as residuals normalised for EP and year differences
-#temporal data - levelled for plot differences
-#plants
-
-pwise_time_plants$mMOW<- (pwise_time_plants$MOW1res+pwise_time_plants$MOW2res)/2 
-
-#insects
-pwise_time_insects$mMOW<- (pwise_time_insects$MOW1res+pwise_time_insects$MOW2res)/2 
-
-
-#spatial data - levelled for year differences
-#plants
-pwise_space_plants$mMOW<- (pwise_space_plants$MOW1res+pwise_space_plants$MOW2res)/2 
-
-#insects
-pwise_space_insects$mMOW<- (pwise_space_insects$MOW1res+pwise_space_insects$MOW2res)/2 
-
-
-save(pwise_time_insects, file="pwise_time_insects_new.RData")
-save(pwise_time_plants, file="pwise_time_plants_new.RData")
-#data prep - check whether all parameters are there
-#soil parameters, temporal/geographic distance and isolation
-
-colnames(pwise_space_plants)#G500_1, G500_2, pH_1, pH_2, soilPCA_1, soilPCA_2, msoil_PC1, dsoil_PC1, msur, dsur, mph, dph
-colnames(pwise_space_insects)#G500_1, G500_2, pH_1, pH_2, soilPCA_1, soilPCA_2, msoil_PC1, dsoil_PC1, msur, dsur, mph, dph
-
-
-colnames(pwise_time_plants)#"pH" "soilPCA" "G500"  
-colnames(pwise_time_insects)#"pH" "soilPCA"   "G500"    
-
-#standardize alpha diversities to range between 0 and 1, like for GDM analysis
-#check before if not already saved in the file!!! 
-#Should be corrected and saved 06.01.2022
-
-library(vegan)
-#plants
-pwise_space_plants$da0st<- decostand(pwise_space_plants$da0, method="range", na.rm=T)
-pwise_space_plants$da1st<- decostand(pwise_space_plants$da1, method="range", na.rm=T)
-pwise_space_plants$da2st<- decostand(pwise_space_plants$da2, method="range", na.rm=T)
-pwise_space_plants$da3st<- decostand(pwise_space_plants$da3, method="range", na.rm=T)
-pwise_space_plants$da4st<- decostand(pwise_space_plants$da4, method="range", na.rm=T)
-
-pwise_time_plants$da0st<- decostand(pwise_time_plants$da0abs, method="range", na.rm=T)
-pwise_time_plants$da1st<- decostand(pwise_time_plants$da1abs, method="range", na.rm=T)
-pwise_time_plants$da2st<- decostand(pwise_time_plants$da2abs, method="range", na.rm=T)
-pwise_time_plants$da3st<- decostand(pwise_time_plants$da3abs, method="range", na.rm=T)
-pwise_time_plants$da4st<- decostand(pwise_time_plants$da4abs, method="range", na.rm=T)
-
-#herbivores
-pwise_space_insects$dha0st<- decostand(pwise_space_insects$dha0, method="range", na.rm=T)
-pwise_space_insects$dha1st<- decostand(pwise_space_insects$dha1, method="range", na.rm=T)
-pwise_space_insects$dha2st<- decostand(pwise_space_insects$dha2, method="range", na.rm=T)
-pwise_space_insects$dha3st<- decostand(pwise_space_insects$dha3, method="range", na.rm=T)
-pwise_space_insects$dha4st<- decostand(pwise_space_insects$dha4, method="range", na.rm=T)
-
-pwise_time_insects$dha0st<- decostand(pwise_time_insects$dha0abs, method="range", na.rm=T)
-pwise_time_insects$dha1st<- decostand(pwise_time_insects$dha1abs, method="range", na.rm=T)
-pwise_time_insects$dha2st<- decostand(pwise_time_insects$dha2abs, method="range", na.rm=T)
-pwise_time_insects$dha3st<- decostand(pwise_time_insects$dha3abs, method="range", na.rm=T)
-pwise_time_insects$dha4st<- decostand(pwise_time_insects$dha4abs, method="range", na.rm=T)
-
-#sec. consumers
-pwise_space_insects$dpa0st<- decostand(pwise_space_insects$dpa0, method="range", na.rm=T)
-pwise_space_insects$dpa1st<- decostand(pwise_space_insects$dpa1, method="range", na.rm=T)
-pwise_space_insects$dpa2st<- decostand(pwise_space_insects$dpa2, method="range", na.rm=T)
-pwise_space_insects$dpa3st<- decostand(pwise_space_insects$dpa3, method="range", na.rm=T)
-pwise_space_insects$dpa4st<- decostand(pwise_space_insects$dpa4, method="range", na.rm=T)
-
-pwise_time_insects$dpa0st<- decostand(pwise_time_insects$dpa0abs, method="range", na.rm=T)
-pwise_time_insects$dpa1st<- decostand(pwise_time_insects$dpa1abs, method="range", na.rm=T)
-pwise_time_insects$dpa2st<- decostand(pwise_time_insects$dpa2abs, method="range", na.rm=T)
-pwise_time_insects$dpa3st<- decostand(pwise_time_insects$dpa3abs, method="range", na.rm=T)
-pwise_time_insects$dpa4st<- decostand(pwise_time_insects$dpa4abs, method="range", na.rm=T)
-
-#Packages
+# # # # # # # # # # # # # #
+# 0 - REQUIREMENTS              ----
+#
+# packages
+# install.packages("gdm")
 library(lme4)
 library(nlme)
 library(lmPerm)
@@ -139,6 +26,26 @@ library(MuMIn)#r.quared.GLMM
 library(car)#Anova(type="II")
 
 tlorder <- c("plants", "herbivores", "secondary.consumers")
+
+# # # # #
+# 0.a. - DATA ----
+#
+#set working directory to folder "3.LMs"
+#herbivores
+load("./data/InputData/pwise_time_herb.RData")
+load("./data/InputData/pwise_space_herb.RData")
+
+#secondary consumers/predators
+load("./data/InputData/pwise_time_pred.RData")
+load("./data/InputData/pwise_space_pred.RData")
+
+#plants
+load("./data/InputData/pwise_time_plants.RData")
+load("./data/InputData/pwise_space_plants.RData")
+
+# if the uploaded, assembled data files are used, upload the complete insect 
+# files and plant files here.
+
 #################PREPARATION####################
 ###############################################
 #scaling all differences and means to max
@@ -186,7 +93,7 @@ scaled_space_alpha[[2]]<- sub_her_space
 scaled_space_alpha[[3]]<- sub_pred_space
 names(scaled_space_alpha)<- tlorder
 
-save(scaled_space_alpha, file="scaled_alpha_space_MOW.RData")
+save(scaled_space_alpha, file="./data/InputData/scaled_alpha_space_MOW.RData")
 
 
 ####time####
@@ -234,13 +141,13 @@ scaled_time_alpha[[2]]<- sub_her_time
 scaled_time_alpha[[3]]<- sub_pred_time
 names(scaled_time_alpha)<- tlorder
 
-save(scaled_time_alpha, file="scaled_alpha_time_MOW.RData")
+save(scaled_time_alpha, file="./data/InputData/scaled_alpha_time_MOW.RData")
 
 ########################
 ###LINEAR MODELS
 #######################
-load("./scaled_alpha_space_MOW.RData")
-load("scaled_alpha_time_MOW.RData")
+load("./data/InputData/scaled_alpha_space_MOW.RData")
+load("./data/InputData/scaled_alpha_time_MOW.RData")
 
 #space
 EV_space_alpha<-list()
@@ -328,8 +235,8 @@ lm_space_alpha[[k]]<- lm_space1
 names(EV_space_alpha)<- tlorder
 names(lm_space_alpha)<- tlorder
 
-save(EV_space_alpha, file="EV_space_MOW_alpha.RData")
-save(lm_space_alpha, file="lm_space_MOW_alpha.RData")
+save(EV_space_alpha, file="./data/OutputData/EV_space_MOW_alpha.RData")
+save(lm_space_alpha, file="./data/OutputData/lm_space_MOW_alpha.RData")
 
 
 #time
@@ -402,393 +309,6 @@ for(k in 1:3){ #I ran this loop manually since sometimes convergence problems ma
 names(EV_time_alpha)<- tlorder
 names(lm_time_alpha)<- tlorder
 
-save(EV_time_alpha, file="EV_time_MOW_alpha.RData")
-save(lm_time_alpha, file="lm_time_MOW_alpha.RData")
-
-####PLOTTING
-#use Figure.R script for plotting
-
-load("./EV_time_MOW_alpha.RData")
-load("./EV_space_MOW_alpha.RData")
-
-EV_time<- EV_time_alpha
-EV_space<- EV_space_alpha
-
-#time
-#EV
-a0_time_mMOW_EV<-c(EV_time[[1]]$mMOWpp[1],EV_time[[2]]$mMOWpp[1],EV_time[[3]]$mMOWpp[1])
-a0_time_dMOW_EV<-c(EV_time[[1]]$dMOWpp[1],EV_time[[2]]$dMOWpp[1],EV_time[[3]]$dMOWpp[1])
-
-
-a1_time_mMOW_EV<-c(EV_time[[1]]$mMOWpp[2],EV_time[[2]]$mMOWpp[2],EV_time[[3]]$mMOWpp[2])
-a1_time_dMOW_EV<-c(EV_time[[1]]$dMOWpp[2],EV_time[[2]]$dMOWpp[2],EV_time[[3]]$dMOWpp[2])
-
-a2_time_mMOW_EV<-c(EV_time[[1]]$mMOWpp[3],EV_time[[2]]$mMOWpp[3],EV_time[[3]]$mMOWpp[3])
-a2_time_dMOW_EV<-c(EV_time[[1]]$dMOWpp[3],EV_time[[2]]$dMOWpp[3],EV_time[[3]]$dMOWpp[3])
-
-a3_time_mMOW_EV<-c(EV_time[[1]]$mMOWpp[4],EV_time[[2]]$mMOWpp[4],EV_time[[3]]$mMOWpp[4])
-a3_time_dMOW_EV<-c(EV_time[[1]]$dMOWpp[4],EV_time[[2]]$dMOWpp[4],EV_time[[3]]$dMOWpp[4])
-
-a4_time_mMOW_EV<-c(EV_time[[1]]$mMOWpp[5],EV_time[[2]]$mMOWpp[5],EV_time[[3]]$mMOWpp[5])
-a4_time_dMOW_EV<-c(EV_time[[1]]$dMOWpp[5],EV_time[[2]]$dMOWpp[5],EV_time[[3]]$dMOWpp[5])
-
-#coefficients
-a0_time_mMOW<-c(EV_time[[1]]$cofm[1],EV_time[[2]]$cofm[1],EV_time[[3]]$cofm[1])
-a0_time_dMOW<-c(EV_time[[1]]$cofd[1],EV_time[[2]]$cofd[1],EV_time[[3]]$cofd[1])
-
-a1_time_mMOW<-c(EV_time[[1]]$cofm[2],EV_time[[2]]$cofm[2],EV_time[[3]]$cofm[2])
-a1_time_dMOW<-c(EV_time[[1]]$cofd[2],EV_time[[2]]$cofd[2],EV_time[[3]]$cofd[2])
-
-a2_time_mMOW<-c(EV_time[[1]]$cofm[3],EV_time[[2]]$cofm[3],EV_time[[3]]$cofm[3])
-a2_time_dMOW<-c(EV_time[[1]]$cofd[3],EV_time[[2]]$cofd[3],EV_time[[3]]$cofd[3])
-
-a3_time_mMOW<-c(EV_time[[1]]$cofm[4],EV_time[[2]]$cofm[4],EV_time[[3]]$cofm[4])
-a3_time_dMOW<-c(EV_time[[1]]$cofd[4],EV_time[[2]]$cofd[4],EV_time[[3]]$cofd[4])
-
-a4_time_mMOW<-c(EV_time[[1]]$cofm[5],EV_time[[2]]$cofm[5],EV_time[[3]]$cofm[5])
-a4_time_dMOW<-c(EV_time[[1]]$cofd[5],EV_time[[2]]$cofd[5],EV_time[[3]]$cofd[5])
-
-#space
-#EV
-a0_space_mMOW_EV<-c(EV_space[[1]]$mMOWpp[1],EV_space[[2]]$mMOWpp[1],EV_space[[3]]$mMOWpp[1])
-a0_space_dMOW_EV<-c(EV_space[[1]]$dMOWpp[1],EV_space[[2]]$dMOWpp[1],EV_space[[3]]$dMOWpp[1])
-
-a1_space_mMOW_EV<-c(EV_space[[1]]$mMOWpp[2],EV_space[[2]]$mMOWpp[2],EV_space[[3]]$mMOWpp[2])
-a1_space_dMOW_EV<-c(EV_space[[1]]$dMOWpp[2],EV_space[[2]]$dMOWpp[2],EV_space[[3]]$dMOWpp[2])
-
-a2_space_mMOW_EV<-c(EV_space[[1]]$mMOWpp[3],EV_space[[2]]$mMOWpp[3],EV_space[[3]]$mMOWpp[3])
-a2_space_dMOW_EV<-c(EV_space[[1]]$dMOWpp[3],EV_space[[2]]$dMOWpp[3],EV_space[[3]]$dMOWpp[3])
-
-a3_space_mMOW_EV<-c(EV_space[[1]]$mMOWpp[4],EV_space[[2]]$mMOWpp[4],EV_space[[3]]$mMOWpp[4])
-a3_space_dMOW_EV<-c(EV_space[[1]]$dMOWpp[4],EV_space[[2]]$dMOWpp[4],EV_space[[3]]$dMOWpp[4])
-
-a4_space_mMOW_EV<-c(EV_space[[1]]$mMOWpp[5],EV_space[[2]]$mMOWpp[5],EV_space[[3]]$mMOWpp[5])
-a4_space_dMOW_EV<-c(EV_space[[1]]$dMOWpp[5],EV_space[[2]]$dMOWpp[5],EV_space[[3]]$dMOWpp[5])
-
-#coefficients
-a0_space_mMOW<-c(EV_space[[1]]$cofm[1],EV_space[[2]]$cofm[1],EV_space[[3]]$cofm[1])
-a0_space_dMOW<-c(EV_space[[1]]$cofd[1],EV_space[[2]]$cofd[1],EV_space[[3]]$cofd[1])
-
-a1_space_mMOW<-c(EV_space[[1]]$cofm[2],EV_space[[2]]$cofm[2],EV_space[[3]]$cofm[2])
-a1_space_dMOW<-c(EV_space[[1]]$cofd[2],EV_space[[2]]$cofd[2],EV_space[[3]]$cofd[2])
-
-a2_space_mMOW<-c(EV_space[[1]]$cofm[3],EV_space[[2]]$cofm[3],EV_space[[3]]$cofm[3])
-a2_space_dMOW<-c(EV_space[[1]]$cofd[3],EV_space[[2]]$cofd[3],EV_space[[3]]$cofd[3])
-
-a3_space_mMOW<-c(EV_space[[1]]$cofm[4],EV_space[[2]]$cofm[4],EV_space[[3]]$cofm[4])
-a3_space_dMOW<-c(EV_space[[1]]$cofd[4],EV_space[[2]]$cofd[4],EV_space[[3]]$cofd[4])
-
-a4_space_mMOW<-c(EV_space[[1]]$cofm[5],EV_space[[2]]$cofm[5],EV_space[[3]]$cofm[5])
-a4_space_dMOW<-c(EV_space[[1]]$cofd[5],EV_space[[2]]$cofd[5],EV_space[[3]]$cofd[5])
-
-tlnames <- c("plants","herbivores","secondary consumers")
-
-cols <- c("#1b9e77", "#d95f02", "#7570b3")
-letmat <- matrix(letters[1:9], nrow=3,byrow=T)
-
-#a0
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,15,2,2))
-par(oma=c(8,6,3,0))
-
-y <- barplot(rev(a0_time_mMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5, 
-             axisnames = T, names=rev(tlnames),
-             xlim=c(-0.07, 0.07),
-             main="mean MOW")
-text(x=0.06, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a0_time_mMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-z <- barplot(rev(a0_time_dMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5, 
-             axisnames = T,
-             xlim=c(-0.07,0.07),
-             main="delta MOW")
-
-text(x=-0.06, y=z,cex=2.5, 
-     labels= paste(round(rev(abs(a0_time_dMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.12,-1, expression(paste("Effect on temporal differences in ", 
-                                alpha," diversity (richness, q = 0)",sep="")),
-     xpd=NA,cex=2.5)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,15,2,2))
-par(oma=c(8,6,3,0))
-
-
-y <- barplot(rev(a0_space_mMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5,
-             axisnames = T,names=rev(tlnames),
-             xlim=c(-0.4,0.4),
-             main="mean MOW")
-text(x=0.3, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a0_space_mMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(a0_space_dMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5,cex.axis = 2.5, cex.names=2.5,
-             axisnames = T,
-             xlim=c(-0.4,0.4),
-             main="delta MOW")
-text(x=-0.3, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a0_space_dMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.65,-1,expression(paste("Effect on spatial differences in ",
-                               alpha, " diversity (richness, q = 0)",sep="")),
-     xpd=NA,cex=2.5)
-
-
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,15,2,2))
-par(oma=c(8,6,3,0))
-
-y <- barplot(rev(a1_time_mMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5, 
-             axisnames = T, names=rev(tlnames),
-             xlim=c(-0.07, 0.07),
-             main="mean MOW")
-text(x=0.06, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a1_time_mMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-z <- barplot(rev(a1_time_dMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5, 
-             axisnames = T,
-             xlim=c(-0.07,0.07),
-             main="delta MOW")
-
-text(x=-0.06, y=z,cex=2.5, 
-     labels= paste(round(rev(abs(a1_time_dMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.12,-1, expression(paste("Effect on temporal differences in ", 
-                                alpha," diversity (q = 1)",sep="")),
-     xpd=NA,cex=2.5)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,15,2,2))
-par(oma=c(8,6,3,0))
-
-
-y <- barplot(rev(a1_space_mMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5,
-             axisnames = T, names=rev(tlnames),
-             xlim=c(-0.4,0.4),
-             main="mean MOW")
-text(x=0.3, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a1_space_mMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(a1_space_dMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5,cex.axis = 2.5, cex.names=2.5,
-             axisnames = T,
-             xlim=c(-0.4,0.4),
-             main="delta MOW")
-text(x=-0.3, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a1_space_dMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.65,-1.0,expression(paste("Effect on spatial differences in ",
-                                 alpha, " diversity (q = 1)",sep="")),
-     xpd=NA,cex=2.5)
-
-# a2
-#####
-
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,15,2,2))
-par(oma=c(8,6,3,0))
-
-y <- barplot(rev(a2_time_mMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5, 
-             axisnames = T, names=rev(tlnames),
-             xlim=c(-0.07, 0.07),
-             main="mean MOW")
-text(x=0.06, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a2_time_mMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-z <- barplot(rev(a2_time_dMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5, 
-             axisnames = T,
-             xlim=c(-0.07,0.06),
-             main="delta MOW")
-
-text(x=-0.06, y=z,cex=2.5, 
-     labels= paste(round(rev(abs(a2_time_dMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.12,-1, expression(paste("Effect on temporal differences in ", 
-                                alpha," diversity (q = 2)",sep="")),
-     xpd=NA,cex=2.5)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,15,2,2))
-par(oma=c(8,6,3,0))
-
-
-y <- barplot(rev(a2_space_mMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5,
-             axisnames = T, names=rev(tlnames),
-             xlim=c(-0.4,0.4),
-             main="mean MOW")
-text(x=0.3, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a2_space_mMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(a2_space_dMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5,cex.axis = 2.5, cex.names=2.5,
-             axisnames = T,
-             xlim=c(-0.4,0.4),
-             main="delta MOW")
-text(x=-0.3, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a2_space_dMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.65,-1.0,expression(paste("Effect on spatial differences in ",
-                                 alpha, " diversity (q = 2)",sep="")),
-     xpd=NA,cex=2.5)
-
-# a3
-#####
-
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,15,2,2))
-par(oma=c(8,6,3,0))
-
-y <- barplot(rev(a3_time_mMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5, 
-             axisnames = T, names=rev(tlnames),
-             xlim=c(-0.07, 0.07),
-             main="mean MOW")
-text(x=0.06, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a3_time_mMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-z <- barplot(rev(a3_time_dMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5, 
-             axisnames = T,
-             xlim=c(-0.07,0.07),
-             main="delta MOW")
-
-text(x=-0.06, y=z,cex=2.5, 
-     labels= paste(round(rev(abs(a3_time_dMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.12,-1, expression(paste("Effect on temporal differences in ", 
-                                alpha," diversity (q = 3)",sep="")),
-     xpd=NA,cex=2.5)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,15,2,2))
-par(oma=c(8,6,3,0))
-
-
-y <- barplot(rev(a3_space_mMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5,
-             axisnames = T,names=rev(tlnames),
-             xlim=c(-0.4,0.4),
-             main="mean MOW")
-text(x=0.3, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a3_space_mMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(a3_space_dMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5,cex.axis = 2.5, cex.names=2.5,
-             axisnames = T,
-             xlim=c(-0.4,0.4),
-             main="delta MOW")
-text(x=-0.3, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a3_space_dMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.65,-1.0,expression(paste("Effect on spatial differences in ",
-                                 alpha, " diversity (q = 3)",sep="")),
-     xpd=NA,cex=2.5)
-
-# a4
-#####
-
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,15,2,2))
-par(oma=c(8,6,3,0))
-
-y <- barplot(rev(a4_time_mMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5, 
-             axisnames = T,names=rev(tlnames),
-             xlim=c(-0.07, 0.07),
-             main="mean MOW")
-text(x=0.06, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a4_time_mMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-z <- barplot(rev(a4_time_dMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5, 
-             axisnames = T,
-             xlim=c(-0.07,0.07),
-             main="delta MOW")
-
-text(x=-0.06, y=z,cex=2.5, 
-     labels= paste(round(rev(abs(a4_time_dMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.12,-1, expression(paste("Effect on temporal differences in ", 
-                                alpha," diversity (q = 4)",sep="")),
-     xpd=NA,cex=2.5)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,15,2,2))
-par(oma=c(8,6,3,0))
-
-
-y <- barplot(rev(a4_space_mMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5, cex.axis = 2.5, cex.names=2.5,
-             axisnames = T,names=rev(tlnames),
-             xlim=c(-0.4,0.4),
-             main="mean MOW")
-text(x=0.3, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a4_space_mMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(a4_space_dMOW), col = rev(cols),las=1,
-             horiz=T, cex.main=2.5,cex.axis = 2.5, cex.names=2.5,
-             axisnames = T,
-             xlim=c(-0.4,0.4),
-             main="delta MOW")
-text(x=-0.3, y=y, cex=2.5,
-     labels= paste(round(rev(abs(a4_space_dMOW_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.65,-1.0,expression(paste("Effect on spatial differences in ",
-                                 alpha, " diversity (q = 4)",sep="")),
-     xpd=NA,cex=2.5)
+save(EV_time_alpha, file="./data/OutputData/EV_time_MOW_alpha.RData")
+save(lm_time_alpha, file="./data/OutputData/lm_time_MOW_alpha.RData")
 

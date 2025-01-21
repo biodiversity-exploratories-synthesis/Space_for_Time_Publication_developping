@@ -1,104 +1,51 @@
 #load data - too large to load all at once
-#plants
-#load("./pwise_space_new.RData")
-#load("./pwise_time_plants_new.RData")
-load("./sitepred_pwise_space_step3.RData")#new pwise_space with updated LUI residuals
-load("./sitepred_pwise_time_step3.RData")#new pwise_space with updated LUI residuals
+# # # # # # # # # # # # # # #  # # # #
+#                                    #
+#             FIT LMs                # 
+#         Beta DIVERSITY             #
+#     land use = LUI index           # 
+#                                    #
+# # # # # # # # # # # # # # #  # # # #
+#
+# spatial and temporal dataset within this script
 
-pwise_time_plants<-as.data.frame(pwise_time) #new names as RData files
-pwise_space_plants<-as.data.frame(pwise_space) #new names as RData files
-
-rm(pwise_space)
-rm(pwise_time)
-
-#insects
-#NB - both plant and insects files have the same names--> add org name to files
-#load("./pwise_space_insects_new.RData")
-#load("./pwise_time_insects_new.RData")
-load("./sitepred_pwise_space_in_step3.RData")#new pwise_space with updated LUI residuals
-load("./sitepred_pwise_time_in_step3.RData")#new pwise_space with updated LUI residuals
-
-pwise_time_insects<-as.data.frame(pwise_time) #new names as RData files
-pwise_space_insects<-as.data.frame(pwise_space) #new names as RData files
-
-rm(pwise_space)
-rm(pwise_time)
-
-#geo dist for the insect datasets - DONE
-a2<- ((pwise_space_insects$HWG2-pwise_space_insects$HWG1))^2
-b2<- ((pwise_space_insects$RWG2-pwise_space_insects$RWG1))^2
-
-pwise_space_insects$geo.dist<- sqrt((a2+b2))
-
-a2<- ((pwise_time_insects$HWG2-pwise_time_insects$HWG1))^2
-b2<- ((pwise_time_insects$RWG2-pwise_time_insects$RWG1))^2
-
-pwise_time_insects$geo.dist<- sqrt((a2+b2))
+# # # # # # # # # # # # # #
+# CONTENT                  ----
+# AIM : Fit LM models of beta diversity, for time and space datasets.
 
 
-#coordinates -not needed anymore
-pwise_time_insects$HWG1<- pwise_time_insects$HWG
-pwise_time_insects$RWG1<- pwise_time_insects$RWG
-
-colnames(pwise_time_insects)[8]<- "HWG"
-colnames(pwise_time_insects)[8]
-
-colnames(pwise_time_insects)[10]<- "RWG"
-colnames(pwise_time_insects)[10]
-
-RWG<- c()
-  
-  for(i in 1:8250) {
-  rwg<-pwise_space$RWG1[pwise_space$EP1 %in% pwise_time_plants$EP[i]]
-  RWG<- c(RWG, rwg[1])}
-RWG[1:57]
-pwise_time_plants$RWG<- RWG
-colnames(pwise_time_plants)[3]<- "HWG"
-
-#meanLUI as average of residuals normalised for EP and year differences
-#temporal data
-#plants
-
-pwise_time_plants$mLUI<- (pwise_time_plants$LUI1res+pwise_time_plants$LUI2res)/2 
-
-#insects
-pwise_time_insects$mLUI<- (pwise_time_insects$LUI1res+pwise_time_insects$LUI2res)/2 
-
-
-#spatial data - levelled for year differences
-#plants
-pwise_space_plants$mLUI<- (pwise_space_plants$LUI1res+pwise_space_plants$LUI2res)/2 
-
-#insects
-pwise_space_insects$mLUI<- (pwise_space_insects$LUI1res+pwise_space_insects$LUI2res)/2 
-
-
-####SAVE DATA
-save(pwise_time_insects, file="pwise_time_insects.RData")
-save(pwise_time_plants, file="pwise_time_plants.RData")
-
-save(pwise_space_insects, file="pwise_space_insects.RData")
-save(pwise_space_plants, file="pwise_space_plants.RData")
-
-#data prep - check whether all parameters are there
-#soil parameters, temporal/geographic distance and isolation
-
-colnames(pwise_space)#G500_1, G500_2, pH_1, pH_2, soilPCA_1, soilPCA_2, msoil_PC1, dsoil_PC1, msur, dsur, mph, dph
-colnames(pwise_space_insects)#G500_1, G500_2, pH_1, pH_2, soilPCA_1, soilPCA_2, msoil_PC1, dsoil_PC1, msur, dsur, mph, dph
-
-
-colnames(pwise_time_plants)#"pH" "soilPCA" "G500"  
-colnames(pwise_time_insects)#"pH" "soilPCA"   "G500"    
-
-#Packages
+# # # # # # # # # # # # # #
+# 0 - REQUIREMENTS              ----
+#
+# packages
+# install.packages("gdm")
 library(lme4)
 library(nlme)
 library(lmPerm)
 library(MuMIn)#r.quared.GLMM
 library(car)#Anova(type="II")
 
-#tlorder <- c("plants", "herbivore", "pollinator", "decomposer", "secondary.consumer")
-tlorder <- c("plants", "herbivore", "secondary.consumer")
+tlorder <- c("plants", "herbivores", "secondary.consumers")
+
+# # # # #
+# 0.a. - DATA ----
+#
+#set working directory to folder "3.LMs"
+#herbivores
+load("./data/InputData/pwise_time_herb.RData")
+load("./data/InputData/pwise_space_herb.RData")
+
+#secondary consumers/predators
+load("./data/InputData/pwise_time_pred.RData")
+load("./data/InputData/pwise_space_pred.RData")
+
+#plants
+load("./data/InputData/pwise_time_plants.RData")
+load("./data/InputData/pwise_space_plants.RData")
+
+# if the uploaded, assembled data files are used, upload the complete insect 
+# files and plant files here.
+
 #################PREPARATION####################
 ###############################################
 #scaling all differences and means to max
@@ -149,7 +96,7 @@ scaled_space[[2]]<- sub_her_space
 scaled_space[[3]]<- sub_pred_space
 names(scaled_space)<- tlorder
 
-save(scaled_space, file="scaled_beta_space_LUI.RData")
+save(scaled_space, file="./data/InputData/scaled_beta_space_LUI.RData")
 
 
 ####time####
@@ -199,13 +146,13 @@ scaled_time[[2]]<- sub_her_time
 scaled_time[[3]]<- sub_pred_time
 names(scaled_time)<- tlorder
 
-save(scaled_time, file="scaled_beta_time_LUI.RData")
+save(scaled_time, file="./data/InputData/scaled_beta_time_LUI.RData")
 
 ########################
 ###LINEAR MODELS
 #######################
-load("./scaled_beta_space_LUI.RData")
-load("scaled_beta_time_LUI.RData")
+load("./data/InputData/scaled_beta_space_LUI.RData")
+load("./data/InputData/scaled_beta_time_LUI.RData")
 
 #space
 EV_space<-list()
@@ -286,8 +233,8 @@ lm_space[[k]]<- lm_space1
 names(EV_space)<- tlorder
 names(lm_space)<- tlorder
 
-save(EV_space, file="EV_space_LUI_beta.RData")
-save(lm_space, file="lm_space_LUI_beta.RData")
+save(EV_space, file="./data/OutputData/EV_space_LUI_beta.RData")
+save(lm_space, file="./data/OutputData/lm_space_LUI_beta.RData")
 
 
 #time
@@ -362,424 +309,5 @@ for(k in 1:3){ #I ran this loop manually since sometimes convergence problems ma
 names(EV_time)<- tlorder
 names(lm_time)<- tlorder
 
-save(EV_time, file="EV_time_LUI_beta.RData")
-save(lm_time, file="lm_time_LUI_beta.RData")
-
-####PLOTTING
-#see/Use script Figures.R as the uptodate script for the figures
-
-load("./EV_time_LUI_beta.RData")
-load("./EV_space_LUI_beta.RData")
-
-EV_time<- EV_time_LUI
-EV_space<- EV_space_LUI
-#time
-#EV
-bsim_time_mLUI_EV<-c(EV_time[[1]]$mLUIpp[1],EV_time[[2]]$mLUIpp[1],EV_time[[3]]$mLUIpp[1])
-bsim_time_dLUI_EV<-c(EV_time[[1]]$dLUIpp[1],EV_time[[2]]$dLUIpp[1],EV_time[[3]]$dLUIpp[1])
-                
-
-b0_time_mLUI_EV<-c(EV_time[[1]]$mLUIpp[2],EV_time[[2]]$mLUIpp[2],EV_time[[3]]$mLUIpp[2])
-b0_time_dLUI_EV<-c(EV_time[[1]]$dLUIpp[2],EV_time[[2]]$dLUIpp[2],EV_time[[3]]$dLUIpp[2])
-
-b1_time_mLUI_EV<-c(EV_time[[1]]$mLUIpp[3],EV_time[[2]]$mLUIpp[3],EV_time[[3]]$mLUIpp[3])
-b1_time_dLUI_EV<-c(EV_time[[1]]$dLUIpp[3],EV_time[[2]]$dLUIpp[3],EV_time[[3]]$dLUIpp[3])
-
-b2_time_mLUI_EV<-c(EV_time[[1]]$mLUIpp[4],EV_time[[2]]$mLUIpp[4],EV_time[[3]]$mLUIpp[4])
-b2_time_dLUI_EV<-c(EV_time[[1]]$dLUIpp[4],EV_time[[2]]$dLUIpp[4],EV_time[[3]]$dLUIpp[4])
-
-b3_time_mLUI_EV<-c(EV_time[[1]]$mLUIpp[5],EV_time[[2]]$mLUIpp[5],EV_time[[3]]$mLUIpp[5])
-b3_time_dLUI_EV<-c(EV_time[[1]]$dLUIpp[5],EV_time[[2]]$dLUIpp[5],EV_time[[3]]$dLUIpp[5])
-
-b4_time_mLUI_EV<-c(EV_time[[1]]$mLUIpp[6],EV_time[[2]]$mLUIpp[6],EV_time[[3]]$mLUIpp[6])
-b4_time_dLUI_EV<-c(EV_time[[1]]$dLUIpp[6],EV_time[[2]]$dLUIpp[6],EV_time[[3]]$dLUIpp[6])
-
-#coefficients
-bsim_time_mLUI<-c(EV_time[[1]]$cofm[1],EV_time[[2]]$cofm[1],EV_time[[3]]$cofm[1])
-bsim_time_dLUI<-c(EV_time[[1]]$cofd[1],EV_time[[2]]$cofd[1],EV_time[[3]]$cofd[1])
-
-b0_time_mLUI<-c(EV_time[[1]]$cofm[2],EV_time[[2]]$cofm[2],EV_time[[3]]$cofm[2])
-b0_time_dLUI<-c(EV_time[[1]]$cofd[2],EV_time[[2]]$cofd[2],EV_time[[3]]$cofd[2])
-
-b1_time_mLUI<-c(EV_time[[1]]$cofm[3],EV_time[[2]]$cofm[3],EV_time[[3]]$cofm[3])
-b1_time_dLUI<-c(EV_time[[1]]$cofd[3],EV_time[[2]]$cofd[3],EV_time[[3]]$cofd[3])
-
-b2_time_mLUI<-c(EV_time[[1]]$cofm[4],EV_time[[2]]$cofm[4],EV_time[[3]]$cofm[4])
-b2_time_dLUI<-c(EV_time[[1]]$cofd[4],EV_time[[2]]$cofd[4],EV_time[[3]]$cofd[4])
-
-b3_time_mLUI<-c(EV_time[[1]]$cofm[5],EV_time[[2]]$cofm[5],EV_time[[3]]$cofm[5])
-b3_time_dLUI<-c(EV_time[[1]]$cofd[5],EV_time[[2]]$cofd[5],EV_time[[3]]$cofd[5])
-
-b4_time_mLUI<-c(EV_time[[1]]$cofm[6],EV_time[[2]]$cofm[6],EV_time[[3]]$cofm[6])
-b4_time_dLUI<-c(EV_time[[1]]$cofd[6],EV_time[[2]]$cofd[6],EV_time[[3]]$cofd[6])
-
-#space
-#EV
-bsim_space_mLUI_EV<-c(EV_space[[1]]$mLUIpp[1],EV_space[[2]]$mLUIpp[1],EV_space[[3]]$mLUIpp[1])
-bsim_space_dLUI_EV<-c(EV_space[[1]]$dLUIpp[1],EV_space[[2]]$dLUIpp[1],EV_space[[3]]$dLUIpp[1])
-
-b0_space_mLUI_EV<-c(EV_space[[1]]$mLUIpp[2],EV_space[[2]]$mLUIpp[2],EV_space[[3]]$mLUIpp[2])
-b0_space_dLUI_EV<-c(EV_space[[1]]$dLUIpp[2],EV_space[[2]]$dLUIpp[2],EV_space[[3]]$dLUIpp[2])
-
-b1_space_mLUI_EV<-c(EV_space[[1]]$mLUIpp[3],EV_space[[2]]$mLUIpp[3],EV_space[[3]]$mLUIpp[3])
-b1_space_dLUI_EV<-c(EV_space[[1]]$dLUIpp[3],EV_space[[2]]$dLUIpp[3],EV_space[[3]]$dLUIpp[3])
-
-b2_space_mLUI_EV<-c(EV_space[[1]]$mLUIpp[4],EV_space[[2]]$mLUIpp[4],EV_space[[3]]$mLUIpp[4])
-b2_space_dLUI_EV<-c(EV_space[[1]]$dLUIpp[4],EV_space[[2]]$dLUIpp[4],EV_space[[3]]$dLUIpp[4])
-
-b3_space_mLUI_EV<-c(EV_space[[1]]$mLUIpp[5],EV_space[[2]]$mLUIpp[5],EV_space[[3]]$mLUIpp[5])
-b3_space_dLUI_EV<-c(EV_space[[1]]$dLUIpp[5],EV_space[[2]]$dLUIpp[5],EV_space[[3]]$dLUIpp[5])
-
-b4_space_mLUI_EV<-c(EV_space[[1]]$mLUIpp[6],EV_space[[2]]$mLUIpp[6],EV_space[[3]]$mLUIpp[6])
-b4_space_dLUI_EV<-c(EV_space[[1]]$dLUIpp[6],EV_space[[2]]$dLUIpp[6],EV_space[[3]]$dLUIpp[6])
-
-#coefficients
-bsim_space_mLUI<-c(EV_space[[1]]$cofm[1],EV_space[[2]]$cofm[1],EV_space[[3]]$cofm[1])
-bsim_space_dLUI<-c(EV_space[[1]]$cofd[1],EV_space[[2]]$cofd[1],EV_space[[3]]$cofd[1])
-
-b0_space_mLUI<-c(EV_space[[1]]$cofm[2],EV_space[[2]]$cofm[2],EV_space[[3]]$cofm[2])
-b0_space_dLUI<-c(EV_space[[1]]$cofd[2],EV_space[[2]]$cofd[2],EV_space[[3]]$cofd[2])
-
-b1_space_mLUI<-c(EV_space[[1]]$cofm[3],EV_space[[2]]$cofm[3],EV_space[[3]]$cofm[3])
-b1_space_dLUI<-c(EV_space[[1]]$cofd[3],EV_space[[2]]$cofd[3],EV_space[[3]]$cofd[3])
-
-b2_space_mLUI<-c(EV_space[[1]]$cofm[4],EV_space[[2]]$cofm[4],EV_space[[3]]$cofm[4])
-b2_space_dLUI<-c(EV_space[[1]]$cofd[4],EV_space[[2]]$cofd[4],EV_space[[3]]$cofd[4])
-
-b3_space_mLUI<-c(EV_space[[1]]$cofm[5],EV_space[[2]]$cofm[5],EV_space[[3]]$cofm[5])
-b3_space_dLUI<-c(EV_space[[1]]$cofd[5],EV_space[[2]]$cofd[5],EV_space[[3]]$cofd[5])
-
-b4_space_mLUI<-c(EV_space[[1]]$cofm[6],EV_space[[2]]$cofm[6],EV_space[[3]]$cofm[6])
-b4_space_dLUI<-c(EV_space[[1]]$cofd[6],EV_space[[2]]$cofd[6],EV_space[[3]]$cofd[6])
-
-tlnames <- c("plants","herbivores","secondary consumers")
-
-cols <- c("#1b9e77", "#d95f02", "#7570b3")
-letmat <- matrix(letters[1:9], nrow=3,byrow=T)
-
-#Turnover
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(bsim_time_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.02, 0.03), names=rev(tlnames), 
-             main="mean LUI")
-  text(x=0.02, y=y, 
-       labels= paste(round(rev(abs(bsim_time_mLUI_EV)), 0), "%", sep=""),
-       adj=c(0.5,0.5))
-
-
-z <- barplot(rev(bsim_time_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.02,0.03),
-             main="delta LUI")
-
-text(x=-0.01, y=z, 
-     labels= paste(round(rev(abs(bsim_time_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.025,-1,expression(paste("Effect on temporal ",beta, " diversity (turnover)",sep="")),xpd=NA,cex=1.2)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(bsim_space_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.3,0.15), names=rev(tlnames), 
-             main="mean LUI")
-text(x=0.05, y=y, 
-     labels= paste(round(rev(abs(bsim_space_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-z <- barplot(rev(bsim_space_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.1,0.2),
-             main="delta LUI")
-text(x=-0.05, y=y, 
-     labels= paste(round(rev(abs(bsim_space_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.1,-1.0,expression(paste("Effect on spatial ",beta, " diversity (turnover)",sep="")),xpd=NA,cex=1.2)
-
-
-
-#Chao 0
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(b0_time_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.05,0.05), names=rev(tlnames), 
-             main="mean LUI")
-text(x=0.03, y=y, 
-     labels= paste(round(rev(abs(b0_time_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(b0_time_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.02,0.02),
-             main="delta LUI")
-
-text(x=-0.01, y=z, 
-     labels= paste(round(rev(abs(b0_time_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.03,-1.0,expression(paste("Effect on temporal ",beta, " diversity (Chao 0)",sep="")),xpd=NA,cex=1.2)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(b0_space_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.2,0.2), names=rev(tlnames), 
-             main="mean LUI")
-
-text(x=0.1, y=y, 
-     labels= paste(round(rev(abs(b0_space_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-z <- barplot(rev(b0_space_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.1,0.2),
-             main="delta LUI")
-
-text(x=-0.05, y=y, 
-     labels= paste(round(rev(abs(b0_space_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.15,-1,expression(paste("Effect on spatial ",beta, " diversity (Chao 0)",sep="")),xpd=NA,cex=1.2)
-
-
-#Chao 1
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(b1_time_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.05,0.05), names=rev(tlnames), 
-             main="mean LUI")
-
-text(x=0.03, y=y, 
-     labels= paste(round(rev(abs(b1_time_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(b1_time_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.05,0.05),
-             main="delta LUI")
-
-text(x=-0.03, y=z, 
-     labels= paste(round(rev(abs(b1_time_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.06,-1,expression(paste("Effect on temporal ",beta, " diversity (Chao 1)",sep="")),xpd=NA,cex=1.2)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(b1_space_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.25,0.1), names=rev(tlnames), 
-             main="mean LUI")
-text(x=0.05, y=y, 
-     labels= paste(round(rev(abs(b1_space_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-z <- barplot(rev(b1_space_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.1,0.3),
-             main="delta LUI")
-
-text(x=-0.05, y=y, 
-     labels= paste(round(rev(abs(b1_space_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.1,-1,expression(paste("Effect on spatial ",beta, " diversity (Chao 1)",sep="")),xpd=NA,cex=1.2)
-
-
-#Chao 2
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(b2_time_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.02,0.02), names=rev(tlnames), 
-             main="mean LUI")
-
-text(x=0.01, y=y, 
-     labels= paste(round(rev(abs(b2_time_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(b2_time_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.05,0.05),
-             main="delta LUI")
-text(x=-0.03, y=z, 
-     labels= paste(round(rev(abs(b2_time_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-## combined x axis
-text(-0.05,-1,expression(paste("Effects on temporal ",beta, " diversity (Chao 2)",sep="")),xpd=NA,cex=1.2)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(b2_space_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.2,0.15), names=rev(tlnames), 
-             main="mean LUI")
-
-text(x=0.08, y=y, 
-     labels= paste(round(rev(abs(b2_space_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(b2_space_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.1,0.3),
-             main="delta LUI")
-
-text(x=-0.08, y=y, 
-     labels= paste(round(rev(abs(b2_space_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.2,-1,expression(paste("Effect on spatial ",beta, " diversity (Chao 2)",sep="")),xpd=NA,cex=1.2)
-
-
-#Chao 3
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(b3_time_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.02,0.02), names=rev(tlnames), 
-             main="mean LUI")
-
-text(x=0.01, y=y, 
-     labels= paste(round(rev(abs(b3_time_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(b3_time_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.05,0.05),
-             main="delta LUI")
-text(x=-0.03, y=z, 
-     labels= paste(round(rev(abs(b3_time_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-## combined x axis
-text(-0.05,-1,expression(paste("Effects on temporal ",beta, " diversity (Chao 3)",sep="")),xpd=NA,cex=1.2)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(b3_space_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.2,0.15), names=rev(tlnames), 
-             main="mean LUI")
-
-text(x=0.08, y=y, 
-     labels= paste(round(rev(abs(b3_space_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(b3_space_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.1,0.3),
-             main="delta LUI")
-
-text(x=-0.08, y=y, 
-     labels= paste(round(rev(abs(b3_space_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.2,-1,expression(paste("Effect on spatial ",beta, " diversity (Chao 3)",sep="")),xpd=NA,cex=1.2)
-
-#Chao 4
-#time
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(b4_time_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.02,0.02), names=rev(tlnames), 
-             main="mean LUI")
-
-text(x=0.01, y=y, 
-     labels= paste(round(rev(abs(b4_time_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(b4_time_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.05,0.05),
-             main="delta LUI")
-text(x=-0.03, y=z, 
-     labels= paste(round(rev(abs(b4_time_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-## combined x axis
-text(-0.05,-1,expression(paste("Effects on temporal ",beta, " diversity (Chao 4)",sep="")),xpd=NA,cex=1.2)
-
-#space
-par(mfrow=c(1,2))
-par(mar=c(2,2,1,2))
-par(oma=c(6,8,3,0))
-
-y <- barplot(rev(b4_space_mLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.2,0.15), names=rev(tlnames), 
-             main="mean LUI")
-
-text(x=0.08, y=y, 
-     labels= paste(round(rev(abs(b4_space_mLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-
-z <- barplot(rev(b4_space_dLUI), col = rev(cols),las=1,
-             horiz=T, cex.main=1.2, axisnames = T,
-             xlim=c(-0.1,0.3),
-             main="delta LUI")
-
-text(x=-0.08, y=y, 
-     labels= paste(round(rev(abs(b4_space_dLUI_EV)), 0), "%", sep=""),
-     adj=c(0.5,0.5))
-
-## combined x axis
-text(-0.2,-1,expression(paste("Effect on spatial ",beta, " diversity (Chao 4)",sep="")),xpd=NA,cex=1.2)
+save(EV_time, file="./data/OutputData/EV_time_LUI_beta.RData")
+save(lm_time, file="./data/OutputData/lm_time_LUI_beta.RData")
