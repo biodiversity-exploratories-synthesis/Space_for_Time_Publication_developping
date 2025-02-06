@@ -244,4 +244,7 @@ for(k in 1:3){
 
 names(EV_time)<- tlorder
 
-save(EV_time, file="./data/OutputData/EV_time_GRA.RData")
+save(EV_time, file="./data/OutputData/EV_time_GRA_beta.RData")
+
+#set working directory to folder "4. Plotting results"
+save(EV_time, file="./data/InputData/EV_time_GRA_beta.RData")

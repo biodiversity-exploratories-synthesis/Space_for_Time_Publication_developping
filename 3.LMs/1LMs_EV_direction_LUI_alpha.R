@@ -317,3 +317,7 @@ names(lm_time_alpha)<- tlorder
 
 save(EV_time_alpha, file="./data/OutputData/EV_time_LUI_alpha.RData")
 save(lm_time_alpha, file="./data/OutputData/lm_time_LUI_alpha.RData")
+
+
+#set working directory to folder "4. Plotting results"
+save(EV_time_alpha, file="./data/InputData/EV_time_LUI_alpha.RData")
