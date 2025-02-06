@@ -286,5 +286,8 @@ remove(dat, gdmTab, GDM)
 
 save(splines_plants_yall_sc, file="data/OutputData/splines_plants_yall_sc_new.RData")
 
+#set working directory to folder "4. Plotting results"
+save(splines_plants_yall_sc, file="./data/InputData/splines_pred_yall_sc.RData")
+
 
 remove(pwise_time)

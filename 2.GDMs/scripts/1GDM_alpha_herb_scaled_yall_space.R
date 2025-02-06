@@ -665,4 +665,11 @@ splines_alpha_herb_sc_time<- splines_alpha_herb_sc
 
 save(splines_alpha_herb_sc_time, file="./data/OutputData/splines_alpha_herb_sc_time.RData")
 
+
+#saving in the "plotting results folder"
+
+#set working directory to folder "4. Plotting results"
+save(splines_alpha_herb_sc_time, file="./data/InputData/splines_alpha_herb_sc_time.RData")
+
+
 remove(pwise_space, pwise_time)

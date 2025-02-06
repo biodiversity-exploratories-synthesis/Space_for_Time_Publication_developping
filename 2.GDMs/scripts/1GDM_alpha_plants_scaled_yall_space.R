@@ -594,5 +594,7 @@ splines_alpha_plant_time_sc<- splines_alpha_plant
 
 save(splines_alpha_plant_time_sc, file="./data/OutputData/splines_alpha_plant_time_sc.RData")
 
+#set working directory to folder "4. Plotting results"
+save(splines_alpha_plant_sc_time, file="./data/InputData/splines_alpha_plant_sc_time.RData")
 
 remove(pwise_time, pwise_space)

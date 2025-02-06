@@ -408,4 +408,7 @@ for(i in 1:4){
 
 save(splines_pred_space_sc, file="./data/Output/splines_pred_space_sc_new.RData")
 
+#set working directory to folder "4. Plotting results"
+save(splines_pred_space_sc, file="./data/InputData/splines_pred_space_sc.RData")
+
 remove(pwise_space)

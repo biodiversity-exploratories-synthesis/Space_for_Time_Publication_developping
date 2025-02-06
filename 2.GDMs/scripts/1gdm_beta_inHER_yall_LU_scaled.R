@@ -301,4 +301,7 @@ remove(dat, gdmTab, GDM)
 
 save(splines_her_yall_sc, file="./data/OutputData/splines_her_yall_sc_new.RData")
 
+#set working directory to folder "4. Plotting results"
+save(splines_her_yall_sc, file="./data/InputData/splines_her_yall_sc.RData")
+
 remove(pwise_time)

@@ -375,3 +375,8 @@ for(i in 1:4){
 
 
 save(splines_plants_space_sc, file="./data/OutputData/splines_plants_space_sc_new.RData")
+
+#set working directory to folder "4. Plotting results"
+save(splines_plants_space_sc, file="./data/InputData/splines_plants_space_sc.RData")
+
+remove(pwise_space)
