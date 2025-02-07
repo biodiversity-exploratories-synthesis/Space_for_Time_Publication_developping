@@ -990,7 +990,7 @@ div_names <- grep("a[0-9]_|ha[0-9]|hb[0-9]|bsim|[ab][0-4]", names(pwisedata_alph
 # individually for herbivores
 exclude_rows_herb <- apply(pwisedata_alphabeta[, which(colnames(pwisedata_alphabeta) %in%
                                                          grep("^h|^dh", div_names, value = T))],
-                           1, function(x) sum(is.na(x)) == 21)
+                           1, function(x) sum(is.na(x)) == length(div_names))
 pwise_time_herb <- pwisedata_alphabeta[!exclude_rows_herb, ]
 pwise_time_herb <- pwise_time_herb[, which(!colnames(pwise_time_herb) %in% grep("^p|^dp", div_names, value = T))] # exclude predators
 # XY rows are removed, XY kept of a total of a total XY
@@ -999,7 +999,7 @@ pwise_time_herb <- pwise_time_herb[, which(!colnames(pwise_time_herb) %in% grep(
 # individually for predators
 exclude_rows_pred <- apply(pwisedata_alphabeta[, which(colnames(pwisedata_alphabeta) %in%
                                                          grep("^p|^dp", div_names, value = T))],
-                           1, function(x) sum(is.na(x)) == 21)
+                           1, function(x) sum(is.na(x)) == length(div_names))
 pwise_time_pred <- pwisedata_alphabeta[!exclude_rows_pred, ]
 pwise_time_pred <- pwise_time_pred[, which(!colnames(pwise_time_pred) %in% grep("^h|^dh", div_names, value = T))] # exclude herbivores
 # XY rows are removed, XY are kept of a total of XY
