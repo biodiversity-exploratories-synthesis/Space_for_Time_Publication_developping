@@ -24,68 +24,277 @@ library(vegan)
 # # # # #
 # 0.a. - DATA ----
 #data
-#set working directory to folder "2.GDM"
-#herbivores
+#set working directory to folder "4. Plotting results"
+#pairwise datasets
+load("./data/InputData/pwise_time_plants.RData")
 load("./data/InputData/pwise_time_herb.RData")
+load("./data/InputData/pwise_time_pred.RData")
+
+load("./data/InputData/pwise_space_plants.RData")
 load("./data/InputData/pwise_space_herb.RData")
-
-# if the uploaded, assembled data files are used, upload the complete insect files
-# here.
-
-#pairwise differences
-#load("./pwise_space_new.RData")
-#load("./pwise_space_in_new.RData")
-
-#load("./pwise_time_ayrs_new.RData")
-#load("./pwise_time_ayrs_in_new.RData")
-
-#Insects
-load("./sitepred_pwise_space_in_step3.RData")#INSECTS: new pwise_space with updated LUI residuals
-load("./sitepred_pwise_time_in_step3.RData")#INSECTS: new pwise_space with updated LUI residuals
-
-pwise_space<- pwise_space_in
-pwise_time<- pwise_time_in
-
-#Plants
-load("./sitepred_pwise_space_step3.RData")#PLANTS: new pwise_space with updated LUI residuals
-load("./sitepred_pwise_time_step3.RData")#PLANTS: new pwise_space with updated LUI residuals
-
-pwise_space<- pwise_space_pl
-pwise_time<- pwise_time_pl
-
+load("./data/InputData/pwise_space_pred.RData")
 
 
 #GDM splines
 #alpha
-load("./splines_alpha_plant_sc_space.RData")
-load("./splines_alpha_plant_sc_time.RData")
+load("./data/InputData/splines_alpha_plant_sc_space.RData")
+load("./data/InputData/splines_alpha_plant_sc_time.RData")
 
-load("./splines_alpha_pred_sc_space.RData")
-load("./splines_alpha_pred_sc_time.RData")
+load("./data/InputData/splines_alpha_pred_sc_space.RData")
+load("./data/InputData/splines_alpha_pred_sc_time.RData")
 
-load("./splines_alpha_herb_sc_space.RData")
-load("./splines_alpha_herb_sc_time.RData")
+load("./data/InputData/splines_alpha_herb_sc_space.RData")
+load("./data/InputData/splines_alpha_herb_sc_time.RData")
 
 #beta
-load("./splines_beta_plant_sc_space.RData")
-load("./splines_beta_plant_sc_time.RData")
+load("./data/InputData/splines_beta_plant_sc_space.RData")
+load("./data/InputData/splines_beta_plant_sc_time.RData")
 
-load("./splines_beta_pred_sc_space.RData")
-load("./splines_beta_pred_sc_time.RData")
+load("./data/InputData/splines_beta_pred_sc_space.RData")
+load("./data/InputData/splines_beta_pred_sc_time.RData")
 
-load("./splines_beta_herb_sc_space.RData")
-load("./splines_beta_herb_sc_time.RData")
+load("./data/InputData/splines_beta_herb_sc_space.RData")
+load("./data/InputData/splines_beta_herb_sc_time.RData")
+
+# 0.b  -  produce merged datasets for later plots ####
+
+# # # # code how to produce div_temp_fig, and div_space_fig.RData # # # # # # # # # # # # # # #  # # # #
+# dataset having alpha and beta diversity of all organisms together
+# # # # # # # # # # # # # # #  # # # #
+
+#in case it does not work, it might be that the vector of standardised differences
+#in alpha diversity - da0/1/2/3/4st got lost
+
+#so check if $da0/1/2/3/4st, $dha0/1/2/3/4st, $dpa0/1/2/3/4st is there, 
+# if missing run code in folder 1. dataset creation/1.Prepare input data...
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+
+#temporal diva/group
+Bsim_time<-c(pwise_time_plants$bsim, #plants
+             pwise_time_herb$hbsim,#herbivores
+             pwise_time_pred$pbsim)#sec. consumers
+
+B0_time<-c(pwise_time_plants$cqn0dis, 
+           pwise_time_herb$hcqn0dis,
+           pwise_time_pred$pcqn0dis) 
+
+B1_time<-c(pwise_time_plants$cqn1dis,
+           pwise_time_herb$hcqn1dis,
+           pwise_time_pred$pcqn1dis) 
+
+B2_time<-c(pwise_time_plants$cqn2dis,
+           pwise_time_herb$hcqn2dis,
+           pwise_time_pred$pcqn2dis)
+
+B3_time<-c(pwise_time_plants$cqn3dis,
+           pwise_time_herb$hcqn3dis,
+           pwise_time_pred$pcqn3dis) 
+
+B4_time<-c(pwise_time_plants$cqn4dis,
+           pwise_time_herb$hcqn4dis,
+           pwise_time_pred$pcqn4dis) 
+
+A0_time<-c(pwise_time_plants$da0st, 
+           pwise_time_herb$dha0st,
+           pwise_time_pred$dpa0st) 
+
+A1_time<-c(pwise_time_plants$da1st, 
+           pwise_time_herb$dha1st,
+           pwise_time_pred$dpa1st) 
+
+A2_time<-c(pwise_time_plants$da2st, 
+           pwise_time_herb$dha2st,
+           pwise_time_pred$dpa2st) 
+
+A3_time<-c(pwise_time_plants$da3st, 
+           pwise_time_herb$dha3st,
+           pwise_time_pred$dpa3st) 
+
+A4_time<-c(pwise_time_plants$da4st, 
+           pwise_time_herb$dha4st,
+           pwise_time_pred$dpa4st) 
+
+EP_time<-c(pwise_time_plants$EP, pwise_time_herb$EP, 
+           pwise_time_pred$EP) 
+
+dYR_time<-c(pwise_time_plants$dYR, pwise_time_herb$dYR, 
+            pwise_time_pred$dYR) 
+
+mLUIraw<- c(pwise_time_plants$mLUI_raw, pwise_time_herb$mLUI_raw, 
+            pwise_time_pred$mLUI_raw)
+
+mLUIscaled<- c(pwise_time_plants$mLUI, pwise_time_herb$mLUI, 
+               pwise_time_pred$mLUI) 
+
+dLUI<- c(pwise_time_plants$dLUI, pwise_time_herb$dLUI, 
+         pwise_time_pred$dLUI) 
+
+mMOWraw<- c(pwise_time_plants$mMOW_raw, pwise_time_herb$mMOW_raw, 
+            pwise_time_pred$mMOW_raw) 
+
+mMOWscaled<- c(pwise_time_plants$mMOW, pwise_time_herb$mMOW, 
+               pwise_time_pred$mMOW) 
+
+dMOW<- c(pwise_time_plants$dMOW, pwise_time_herb$dMOW, 
+         pwise_time_pred$dMOW) 
+
+mGRAraw<- c(pwise_time_plants$mGRA_raw, pwise_time_herb$mGRA_raw, 
+            pwise_time_pred$mGRA_raw)
+
+mGRAscaled<- c(pwise_time_plants$mGRA, pwise_time_herb$mGRA, 
+               pwise_time_pred$mGRA) 
+
+dGRA<- c(pwise_time_plants$dGRA, pwise_time_herb$dGRA, 
+         pwise_time_pred$dGRA)
+
+mFERraw<- c(pwise_time_plantss$mFER_raw, pwise_time_herb$mFER_raw, 
+            pwise_time_pred$mFER_raw)
+
+mFERscaled<- c(pwise_time_plants$mFER, pwise_time_herb$mFER, 
+               pwise_time_pred$mFER) 
+
+dFER<- c(pwise_time_plants$dFER, pwise_time_herb$dFER, 
+         pwise_time_pred$dFER) 
+
+group<- rep(c("plant", "herbivore", "secondary consumer"),
+            times= c(nrow(pwise_time_plants),
+                     nrow(pwise_time_herb),nrow(pwise_time_pred)))
+
+div_temp<- data.frame(Bsim_time, B0_time, B1_time
+                      ,B2_time, B3_time, B4_time,
+                      A0_time, A1_time
+                      ,A2_time, A3_time, A4_time,
+                      EP_time, dYR_time, 
+                      mLUIraw,mLUIscaled, dLUI,
+                      mMOWraw, mMOWscaled, dMOW,
+                      mGRAraw, mGRAscaled, dGRA,
+                      mFERraw, mFERscaled, dFER,
+                      group)
+
+div_temp$group<- as.factor(div_temp$group)
+div_temp$group<- factor(div_temp$group, levels =
+                          c("plant","herbivore", "secondary consumer"))
+
+
+#spatial div/group
+
+Bsim_space<-c(pwise_space_plants$bsim,
+              pwise_space_herb$hbsim, 
+              pwise_space_pred$pbsim) 
+
+B0_space<-c(pwise_space_plants$cqn0dis, 
+            pwise_space_herb$hcqn0dis, 
+            pwise_space_pred$pcqn0dis) 
+
+B1_space<-c(pwise_space_plants$cqn1dis, 
+            pwise_space_herb$hcqn1dis,
+            pwise_space_pred$pcqn1dis) 
+
+B2_space<-c(pwise_space_plants$cqn2dis, 
+            pwise_space_herb$hcqn2dis,
+            pwise_space_pred$pcqn2dis) 
+
+B3_space<-c(pwise_space_plants$cqn3dis, 
+            pwise_space_herb$hcqn3dis,
+            pwise_space_pred$pcqn3dis) 
+
+B4_space<-c(pwise_space_plants$cqn4dis, 
+            pwise_space_herb$hcqn4dis,
+            pwise_space_pred$pcqn4dis) 
+A0_space<-c(pwise_space_plants$da0st, 
+            pwise_space_herb$dha0st,
+            pwise_space_pred$dpa0st) 
+
+A1_space<-c(pwise_space_plants$da1st, 
+            pwise_space_herb$dha1st,
+            pwise_space_pred$dpa1st) 
+
+A2_space<-c(pwise_space_plants$da2st, 
+            pwise_space_herb$dha2st,
+            pwise_space_pred$dpa2st) 
+
+A3_space<-c(pwise_space_plants$da3st, 
+            pwise_space_herb$dha3st,
+            pwise_space_pred$dpa3st) 
+
+A4_space<-c(pwise_space_plants$da4st, 
+            pwise_space_herb$dha4st,
+            pwise_space_pred$dpa4st) 
+
+Dist_space<- c(pwise_space_plants$geo.dist,
+               pwise_space_herb$geo.dist, 
+               pwise_space_pred$geo.dist) 
+
+YR_space<-c(pwise_space_plants$YR, 
+            pwise_space_herb$YR, 
+            pwise_space_pred$YR) 
 
 
 
-# # # # #
-# 0.b. - FUNCTIONS ----
-#
-#TODO
+mLUIraw<- c(pwise_space_plants$mLUI_raw, pwise_space_herb$mLUI_raw, 
+            pwise_space_pred$mLUI_raw) 
+mLUIscaled<- c(pwise_space_plants$mLUI, pwise_space_herb$mLUI, 
+               pwise_space_pred$mLUI) 
+dLUI<- c(pwise_space_plants$dLUI, pwise_space_herb$dLUI, 
+         pwise_space_pred$dLUI) 
 
+mMOWraw<- c(pwise_space_plants$mMOW_raw, pwise_space_herb$mMOW_raw, 
+            pwise_space_pred$mMOW_raw) 
+mMOWscaled<- c(pwise_space_plants$mMOW, pwise_space_herb$mMOW, 
+               pwise_space_pred$mMOW) 
+dMOW<- c(pwise_space_plants$dMOW, pwise_space_herb$dMOW, 
+         pwise_space_pred$dMOW) 
 
+mGRAraw<- c(pwise_space_plants$mGRA_raw, pwise_space_herb$mGRA_raw, 
+            pwise_space_pred$mGRA_raw) 
+mGRAscaled<- c(pwise_space_plants$mGRA, pwise_space_herb$mGRA, 
+               pwise_space_pred$mGRA) 
+dGRA<- c(pwise_space_plants$dGRA, pwise_space_herb$dGRA, 
+         pwise_space_pred$dGRA)
 
+mFERraw<- c(pwise_space_plants$mFER_raw, pwise_space_herb$mFER_raw, 
+            pwise_space_pred$mFER_raw) 
+mFERscaled<- c(pwise_space_plants$mFER, pwise_space_herb$mFER, 
+               pwise_space_pred$mFER) 
+dFER<- c(pwise_space_plants$dFER, pwise_space_herb$dFER, 
+         pwise_space_pred$dFER) 
+group<- rep(c("plant",  "herbivore", "secondary consumer"),
+            times=c(nrow(pwise_space), nrow(pwise_space_in),nrow(pwise_space_in)))
 
+div_space<- data.frame(Bsim_space, B0_space, B1_space
+                       ,B2_space, B3_space, B4_space,
+                       A0_space, A1_space, A2_space,
+                       A3_space, A4_space,
+                       YR_space, Dist_space, 
+                       mLUIraw,mLUIscaled, dLUI,
+                       mMOWraw, mMOWscaled, dMOW,
+                       mGRAraw, mGRAscaled, dGRA,
+                       mFERraw, mFERscaled, dFER,
+                       group)
+
+div_space$group<- as.factor(div_space$group)
+div_space$group<- factor(div_space$group, levels =
+                           c("plant", "herbivore",  "secondary consumer"))
+
+reg<- c(paste(pwise_time_plants$REG), paste(pwise_time_herb$REG), 
+        paste(pwise_time_pred$REG))
+div_temp$reg<- as.factor(reg)
+reg<- c(paste(pwise_space_plants$dREG), paste(pwise_space_herb$dREG), 
+        paste(pwise_space_pred$dREG))
+div_space$reg<- as.factor(reg)
+
+#set working directory to 4. plotting results
+save(div_temp, file="/data/InputData/div_temp_fig.RData")
+
+save(div_space, file="/data/InputData/div_space_fig.RData")
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 # # # # # # # # # # # # # #
 # 1 - GDM plots              ----
@@ -125,9 +334,7 @@ max(alpha_space$LUIy[alpha_space$alpha_type=="a0"]) # 0.4705429
 # main figures
 # alpha - richness
 
-#TODO below code has error, what are the levels? The error is already in Lena script
-# potentially duplicated?
-alpha_time$organism<- factor(alpha_time$organism, levels = )
+alpha_time$organism<- factor(alpha_time$organism, levels = c("plants", "herbivores", "sec.consumers"))
 p2<- ggplot(alpha_time[alpha_time$alpha_type=="a0",], aes(x=LUIx, y=LUIy, colour=organism))+
   geom_line(size=1.5)+
   xlim(-2.5, 2.5)+
@@ -544,9 +751,6 @@ p4<- ggplot(splines_alpha_pred_sc_time, aes(x=FERx, y=FERy, colour=alpha_type))+
 p4
 
 p1 + p2 + p3 + p4 + plot_layout(guides="collect")
-
-
-
 
 
 # # # # #
@@ -1016,13 +1220,11 @@ p1 + p2 + p3 + p4 + plot_layout(guides="collect")
 # # # # #
 # 2.1. - ALPHA ----
 
-load("./EV_time_LUI_alpha.RData")
-load("./EV_space_LUI_alpha.RData")
+load("./data/InputData/EV_time_LUI_alpha.RData")
+load("./data/InputData/EV_space_LUI_alpha.RData")
 
-EV_time<- EV_time_alpha
-EV_space<- EV_space_alpha
-
-
+EV_time_alpha<- EV_time
+EV_space_alpha<- EV_space
 # # # # #
 # 2.1.a. - alpha time ----
 
@@ -1100,11 +1302,14 @@ tlnames <- c("plants","herbivores","secondary consumers")
 cols <- c("#1b9e77", "#d95f02", "#7570b3")
 letmat <- matrix(letters[1:9], nrow=3,byrow=T)
 
+#remove files as names overlaps with next files
+remove(EV_time_alpha, EV_space_alpha)
 
 # # # # #
 # 2.2. - a0 MAIN FIGURE ----
 #
 #a0 - **main figure**
+
 
 # # # # #
 # 2.2.a. - a0 time ----
@@ -1448,8 +1653,8 @@ text(-0.5,-1.0,expression(paste("Effect on spatial differences in ",
 # # # # #
 # 2.2. - BETA ----
 #
-load("./EV_time_LUI.RData")
-load("./EV_space_LUI.RData")
+load("./data/InputData/EV_time_LUI_beta.RData")
+load("./data/InputData/EV_space_LUI_beta.RData")
 
 #time
 #EV
@@ -1536,6 +1741,8 @@ tlnames <- c("plants","herbivores","secondary consumers")
 cols <- c("#1b9e77", "#d95f02", "#7570b3")
 letmat <- matrix(letters[1:9], nrow=3,byrow=T)
 
+#remove files as they overlap with next ones in their name
+remove(EV_time, EV_space)
 
 # # # # #
 # 2.2.a. - turnover time ----
@@ -1927,6 +2134,7 @@ text(-0.6,-1.0,
      xpd=NA,cex=2.5)
 
 
+# these plots above can be replicated for the other LUI components
 
 # # # # # # # # # # # # # #
 # 3 - SCATTERPLOTS              ----
@@ -1934,229 +2142,6 @@ text(-0.6,-1.0,
 # Overview scatterplot - average dissimilarity in space and time
 # idea: #scatterplot group means - space vs time
 #
-
-# # # # code how to produce div_temp_fig, and div_space_fig.RData # # # # # # # # # # # # # # #  # # # #
-# dataset having alpha and beta diversity of all organisms together
-# # # # # # # # # # # # # # #  # # # #
-
-#data
-
-# set working directory to 4. plotting results
-#pairwise differences
-#plants
-load("~./data/InputData/pwise_time_plants.RData")
-load("~./data/InputData/pwise_time_herb.RData")
-load("~./data/InputData/pwise_time_pred.RData")
-
-load("~./data/InputData/pwise_space_plants.RData")
-load("~./data/InputData/pwise_space_herb.RData")
-load("~./data/InputData/pwise_space_pred.RData")
-
-#in case it does not work, it might be that the vector of standardised differences
-#in alpha diversity - da0/1/2/3/4st got lost
-
-#so check if $da0/1/2/3/4st, $dha0/1/2/3/4st, $dpa0/1/2/3/4st is there, 
-# if missing run code in folder 1. dataset creation/1.Prepare input data...
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-
-#temporal diva/group
-Bsim_time<-c(pwise_time_plants$bsim, #plants
-             pwise_time_herb$hbsim,#herbivores
-             pwise_time_pred$pbsim) #sec. consumers
-B0_time<-c(pwise_time_plants$cqn0dis, 
-           pwise_time_herb$hcqn0dis,
-           pwise_time_pred$pcqn0dis) 
-B1_time<-c(pwise_time_plants$cqn1dis,
-           pwise_time_herb$hcqn1dis,
-           pwise_time_pred$pcqn1dis) 
-B2_time<-c(pwise_time_plants$cqn2dis,
-           pwise_time_herb$hcqn2dis,
-           pwise_time_pred$pcqn2dis) 
-B3_time<-c(pwise_time_plants$cqn3dis,
-           pwise_time_herb$hcqn3dis,
-           pwise_time_pred$pcqn3dis) 
-B4_time<-c(pwise_time_plants$cqn4dis,
-           pwise_time_herb$hcqn4dis,
-           pwise_time_pred$pcqn4dis) 
-
-A0_time<-c(pwise_time_plants$da0st, 
-           pwise_time_herb$dha0st,
-           pwise_time_pred$dpa0st) 
-
-A1_time<-c(pwise_time_plants$da1st, 
-           pwise_time_herb$dha1st,
-           pwise_time_pred$dpa1st) 
-
-A2_time<-c(pwise_time_plants$da2st, 
-           pwise_time_herb$dha2st,
-           pwise_time_pred$dpa2st) 
-
-A3_time<-c(pwise_time_plants$da3st, 
-           pwise_time_herb$dha3st,
-           pwise_time_pred$dpa3st) 
-
-A4_time<-c(pwise_time_plants$da4st, 
-           pwise_time_herb$dha4st,
-           pwise_time_pred$dpa4st) 
-
-EP_time<-c(pwise_time_plants$EP, pwise_time_herb$EP, 
-           pwise_time_pred$EP) 
-
-dYR_time<-c(pwise_time_plants$dYR, pwise_time_herb$dYR, 
-            pwise_time_pred$dYR) 
-
-mLUIraw<- c(pwise_time_plants$mLUI_raw, pwise_time_herb$mLUI_raw, 
-            pwise_time_pred$mLUI_raw) 
-mLUIscaled<- c(pwise_time_plants$mLUI, pwise_time_herb$mLUI, 
-               pwise_time_pred$mLUI) 
-dLUI<- c(pwise_time_plants$dLUI, pwise_time_herb$dLUI, 
-         pwise_time_pred$dLUI) 
-
-mMOWraw<- c(pwise_time_ayrs$mMOW_raw, pwise_time_ayrs_in$mMOW_raw, 
-            pwise_time_ayrs_in$mMOW_raw) 
-mMOWscaled<- c(pwise_time_ayrs$mMOW, pwise_time_ayrs_in$mMOW, 
-               pwise_time_ayrs_in$mMOW) 
-dMOW<- c(pwise_time_ayrs$dMOW, pwise_time_ayrs_in$dMOW, 
-         pwise_time_ayrs_in$dMOW) 
-
-mGRAraw<- c(pwise_time_ayrs$mGRA_raw, pwise_time_ayrs_in$mGRA_raw, 
-            pwise_time_ayrs_in$mGRA_raw) 
-mGRAscaled<- c(pwise_time_ayrs$mGRA, pwise_time_ayrs_in$mGRA, 
-               pwise_time_ayrs_in$mGRA) 
-dGRA<- c(pwise_time_ayrs$dGRA, pwise_time_ayrs_in$dGRA, 
-         pwise_time_ayrs_in$dGRA)
-
-mFERraw<- c(pwise_time_ayrs$mFER_raw, pwise_time_ayrs_in$mFER_raw, 
-            pwise_time_ayrs_in$mFER_raw) 
-mFERscaled<- c(pwise_time_ayrs$mFER, pwise_time_ayrs_in$mFER, 
-               pwise_time_ayrs_in$mFER) 
-dFER<- c(pwise_time_ayrs$dFER, pwise_time_ayrs_in$dFER, 
-         pwise_time_ayrs_in$dFER) 
-
-group<- rep(c("plant", "herbivore", "secondary consumer"),
-            times= c(nrow(pwise_time_ayrs),
-                     nrow(pwise_time_ayrs_in),nrow(pwise_time_ayrs_in)))
-
-div_temp<- data.frame(Bsim_time, B0_time, B1_time
-                      ,B2_time, B3_time, B4_time,
-                      A0_time, A1_time
-                      ,A2_time, A3_time, A4_time,
-                      EP_time, dYR_time, 
-                      mLUIraw,mLUIscaled, dLUI,
-                      mMOWraw, mMOWscaled, dMOW,
-                      mGRAraw, mGRAscaled, dGRA,
-                      mFERraw, mFERscaled, dFER,
-                      group)
-
-div_temp$group<- as.factor(div_temp$group)
-div_temp$group<- factor(div_temp$group, levels =
-                          c("plant","herbivore", "secondary consumer"))
-
-
-#spatial div/group
-
-Bsim_space<-c(pwise_space$bsim,
-              pwise_space_in$hbsim, 
-              pwise_space_in$pbsim) 
-
-B0_space<-c(pwise_space$cqn0dis, 
-            pwise_space_in$hcqn0dis, 
-            pwise_space_in$pcqn0dis) 
-B1_space<-c(pwise_space$cqn1dis, 
-            pwise_space_in$hcqn1dis,
-            pwise_space_in$pcqn1dis) 
-B2_space<-c(pwise_space$cqn2dis, 
-            pwise_space_in$hcqn2dis,
-            pwise_space_in$pcqn2dis) 
-B3_space<-c(pwise_space$cqn3dis, 
-            pwise_space_in$hcqn3dis,
-            pwise_space_in$pcqn3dis) 
-B4_space<-c(pwise_space$cqn4dis, 
-            pwise_space_in$hcqn4dis,
-            pwise_space_in$pcqn4dis) 
-A0_space<-c(pwise_space$da0st, 
-            pwise_space_in$dha0st,
-            pwise_space_in$dpa0st) 
-
-A1_space<-c(pwise_space$da1st, 
-            pwise_space_in$dha1st,
-            pwise_space_in$dpa1st) 
-
-A2_space<-c(pwise_space$da2st, 
-            pwise_space_in$dha2st,
-            pwise_space_in$dpa2st) 
-
-A3_space<-c(pwise_space$da3st, 
-            pwise_space_in$dha3st,
-            pwise_space_in$dpa3st) 
-
-A4_space<-c(pwise_space$da4st, 
-            pwise_space_in$dha4st,
-            pwise_space_in$dpa4st) 
-
-Dist_space<- c(pwise_space$geo.dist,
-               pwise_space_in$geo.dist, 
-               pwise_space_in$geo.dist) 
-YR_space<-c(pwise_space$YR, 
-            pwise_space_in$YR, 
-            pwise_space_in$YR) 
-
-
-
-mLUIraw<- c(pwise_space$mLUI_raw, pwise_space_in$mLUI_raw, 
-            pwise_space_in$mLUI_raw) 
-mLUIscaled<- c(pwise_space$mLUI, pwise_space_in$mLUI, 
-               pwise_space_in$mLUI) 
-dLUI<- c(pwise_space$dLUI, pwise_space_in$dLUI, 
-         pwise_space_in$dLUI) 
-
-mMOWraw<- c(pwise_space$mMOW_raw, pwise_space_in$mMOW_raw, 
-            pwise_space_in$mMOW_raw) 
-mMOWscaled<- c(pwise_space$mMOW, pwise_space_in$mMOW, 
-               pwise_space_in$mMOW) 
-dMOW<- c(pwise_space$dMOW, pwise_space_in$dMOW, 
-         pwise_space_in$dMOW) 
-
-mGRAraw<- c(pwise_space$mGRA_raw, pwise_space_in$mGRA_raw, 
-            pwise_space_in$mGRA_raw) 
-mGRAscaled<- c(pwise_space$mGRA, pwise_space_in$mGRA, 
-               pwise_space_in$mGRA) 
-dGRA<- c(pwise_space$dGRA, pwise_space_in$dGRA, 
-         pwise_space_in$dGRA)
-
-mFERraw<- c(pwise_space$mFER_raw, pwise_space_in$mFER_raw, 
-            pwise_space_in$mFER_raw) 
-mFERscaled<- c(pwise_space$mFER, pwise_space_in$mFER, 
-               pwise_space_in$mFER) 
-dFER<- c(pwise_space$dFER, pwise_space_in$dFER, 
-         pwise_space_in$dFER) 
-group<- rep(c("plant",  "herbivore", "secondary consumer"),
-            times=c(nrow(pwise_space), nrow(pwise_space_in),nrow(pwise_space_in)))
-
-div_space<- data.frame(Bsim_space, B0_space, B1_space
-                       ,B2_space, B3_space, B4_space,
-                       A0_space, A1_space, A2_space,
-                       A3_space, A4_space,
-                       YR_space, Dist_space, 
-                       mLUIraw,mLUIscaled, dLUI,
-                       mMOWraw, mMOWscaled, dMOW,
-                       mGRAraw, mGRAscaled, dGRA,
-                       mFERraw, mFERscaled, dFER,
-                       group)
-
-div_space$group<- as.factor(div_space$group)
-div_space$group<- factor(div_space$group, levels =
-                           c("plant", "herbivore",  "secondary consumer"))
-
-save(div_temp, file="div_temp_fig.RData")
-
-save(div_space, file="div_space_fig.RData")
-
-
 # # # # #
 # 3.x.x. - create all_region_means.RData ----
 #
@@ -2166,44 +2151,20 @@ save(div_space, file="div_space_fig.RData")
 library(data.table)
 
 #TODO HERE
-# load required datasets (only if you start running the script here)
+
+# set working directory to 4. plotting results
+# load required datasets as produced/loaded above (only if you start running the script here)
+
 load("div_temp_fig.RData")
 load("div_space_fig.RData")
 
-#plants
-#load("./pwise_space_plants_new.RData")
-#load("./pwise_time_ayrs_new.RData")
-load("./sitepred_pwise_space_step3.RData")#new pwise_plants_space with updated LUI residuals
-load("./sitepred_pwise_time_step3.RData")#new pwise_plants_space with updated LUI residuals
+load("./data/InputData/pwise_time_plants.RData")
+load("./data/InputData/pwise_time_herb.RData")
+load("./data/InputData/pwise_time_pred.RData")
 
-pwise_time_plants<-as.data.frame(pwise_time) #new names as RData files
-pwise_space_plants<-as.data.frame(pwise_space) #new names as RData files
-
-rm(pwise_space)
-rm(pwise_time)
-
-
-#insects
-#NB - both plant and insects files have the same names--> add org name to files
-#load("./pwise_plants_space_in_new.RData")
-#load("./pwise_time_ayrs_in_new.RData")
-load("./sitepred_pwise_space_in_step3.RData")#new pwise_plants_space with updated LUI residuals
-load("./sitepred_pwise_time_in_step3.RData")#new pwise_plants_space with updated LUI residuals
-
-pwise_time_insects<-as.data.frame(pwise_time) #new names as RData files
-pwise_space_insects<-as.data.frame(pwise_space) #new names as RData files
-
-rm(pwise_space)
-rm(pwise_time)
-
-#create a region factor
-reg<- c(paste(pwise_time_plants$REG), paste(pwise_time_insects$REG), 
-        paste(pwise_time_insects$REG))
-div_temp$reg<- as.factor(reg)
-reg<- c(paste(pwise_space_plants$dREG), paste(pwise_space_insects$dREG), 
-        paste(pwise_space_insects$dREG))
-div_space$reg<- as.factor(reg)
-
+load("./data/InputData/pwise_space_plants.RData")
+load("./data/InputData/pwise_space_herb.RData")
+load("./data/InputData/pwise_space_pred.RData")
 
 # set working directory to R Functions
 # and the we link the functions to plott results to this script
@@ -2277,23 +2238,6 @@ a4 <- calc_spatial_regionwise_mean_sd_and_add_to_temporal(temp, "A4_space", div_
 
 
 reg<- as.factor(rep(c("AEG", "HEG", "SEG"), each=3))
-
-#TODO : make below solution for current data structure
-# all_mean<- data.frame(temp_mean_sim,
-#                       temp_mean_b0, temp_mean_b1,
-#                       temp_mean_b2,temp_mean_b3,temp_mean_b4,
-#                       temp_mean_a0, temp_mean_a1,
-#                       temp_mean_a2,temp_mean_a3,temp_mean_a4,
-#                       space_mean_sim,
-#                       space_mean_b0, space_mean_b1,
-#                       space_mean_b2,space_mean_b3,space_mean_b4,
-#                       space_mean_a0, space_mean_a1,
-#                       space_mean_a2,space_mean_a3,space_mean_a4,
-#                       reg)
-# save(all_mean, file="all_region_means.RData")
-
-#TODO re-convert space and time div to data.frame from data.table
-
 
 # # # # # # # # # # # # # #
 # 3 - SCATTERPLOTS              ----
