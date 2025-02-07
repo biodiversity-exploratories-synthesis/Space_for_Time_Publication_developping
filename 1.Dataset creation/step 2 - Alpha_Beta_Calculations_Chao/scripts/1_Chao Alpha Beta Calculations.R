@@ -361,7 +361,6 @@ exclude_rows <- apply(pwisedata_alphabeta[, which(colnames(pwisedata_alphabeta) 
                       1, function(x) sum(is.na(x)) == length(div_names))
 # remove rows with NA in all diversity columns
 pwisedata_cleaned <- pwisedata_alphabeta[!exclude_rows, ]
-# -- DONE Noelle
 
 
 # save as
@@ -673,7 +672,7 @@ div_names <- grep("a[0-9]_|ha[0-9]|hb[0-9]|bsim|[ab][0-4]", names(pwisedata_alph
 # individually for herbivores
 exclude_rows_herb <- apply(pwisedata_alphabeta[, which(colnames(pwisedata_alphabeta) %in%
                                                     grep("^h|^dh", div_names, value = T))],
-                      1, function(x) sum(is.na(x)) == 21)
+                      1, function(x) sum(is.na(x)) == length(div_names))
 pwise_space_herb <- pwisedata_alphabeta[!exclude_rows_herb, ]
 pwise_space_herb <- pwise_space_herb[, which(!colnames(pwise_space_herb) %in% grep("^p|^dp", div_names, value = T))] # exclude predators
 # 24231 rows are removed, 98694 kept of a total of a total 122925
@@ -681,7 +680,7 @@ pwise_space_herb <- pwise_space_herb[, which(!colnames(pwise_space_herb) %in% gr
 # individually for predators
 exclude_rows_pred <- apply(pwisedata_alphabeta[, which(colnames(pwisedata_alphabeta) %in%
                                                          grep("^p|^dp", div_names, value = T))],
-                           1, function(x) sum(is.na(x)) == 21)
+                           1, function(x) sum(is.na(x)) == length(div_names))
 pwise_space_pred <- pwisedata_alphabeta[!exclude_rows_pred, ]
 pwise_space_pred <- pwise_space_pred[, which(!colnames(pwise_space_pred) %in% grep("^h|^dh", div_names, value = T))] # exclude herbivores
 # 30052 rows are removed, 92873 are kept of a total of 122925
@@ -689,7 +688,7 @@ pwise_space_pred <- pwise_space_pred[, which(!colnames(pwise_space_pred) %in% gr
 #save
 save(pwise_space_herb, file="data/OutputData/pwise_space_herb.RData")
 save(pwise_space_pred, file="data/OutputData/pwise_space_pred.RData")
-# -- DONE Noelle
+
 
 rm(pwisedata_alphabeta)
 rm(pwisedata)
