@@ -356,10 +356,9 @@ pwisedata_alphabeta<- data.frame(pwisedata,
 # some of the combinations do not exist, because no data was collected in some
 #   of the years. Exclude those cases.
 div_names <- grep("a[0-9]_|bsim|[ab][0-4]", names(pwisedata_alphabeta), value = T)
-# find rows with 21 NA values (all diversity indices are NA)
-#   removes 149 rows
+# find rows with 26 NA values (all diversity indices are NA)
 exclude_rows <- apply(pwisedata_alphabeta[, which(colnames(pwisedata_alphabeta) %in% div_names)],
-                      1, function(x) sum(is.na(x)) == 21)
+                      1, function(x) sum(is.na(x)) == length(div_names))
 # remove rows with NA in all diversity columns
 pwisedata_cleaned <- pwisedata_alphabeta[!exclude_rows, ]
 # -- DONE Noelle
