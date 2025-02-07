@@ -24,6 +24,13 @@ library(vegan)
 # # # # #
 # 0.a. - DATA ----
 #data
+#set working directory to folder "2.GDM"
+#herbivores
+load("./data/InputData/pwise_time_herb.RData")
+load("./data/InputData/pwise_space_herb.RData")
+
+# if the uploaded, assembled data files are used, upload the complete insect files
+# here.
 
 #pairwise differences
 #load("./pwise_space_new.RData")
@@ -1336,7 +1343,7 @@ text(-0.10,-1, expression(paste("Effect on temporal differences in ",
      xpd=NA,cex=2.5)
 
 # # # # #
-# 2.3.f. - a3 space ----
+# 2.3.f.  -  a3 space ----
 #
 #space
 par(mfrow=c(1,2))
@@ -1928,154 +1935,86 @@ text(-0.6,-1.0,
 # idea: #scatterplot group means - space vs time
 #
 
-#data
-load("./div_temp_fig.RData")
-load("./div_space_fig.RData")
-load("./all_region_means.RData") # input to plots, 
-
-
-# # # # #
-# 3.x. CLEAN ME!  ----
-#
-#TODO - - - - - - - clean the part
-# the code below in lines 1779... produces this file
-# the plot so far uses mean values without SE as input - 
-# maybe in the loops after line 362 we could also aggregate SD additionally to mean
-
-# # # # #
-# 3.x.y. - create div fig datasets  ----
-#
-# # # # code how to produce adiv_temp_fig, and div_space_fig.RData # # # # # # # # # # # # # # #  # # # #
+# # # # code how to produce div_temp_fig, and div_space_fig.RData # # # # # # # # # # # # # # #  # # # #
 # datset having alpha and beta diversity of all organisms together
 # # # # # # # # # # # # # # #  # # # #
 
 #data
 
+# set working directory to 4. plotting results
 #pairwise differences
 #plants
-load("./pwise_space_new.RData")
-load("./pwise_time_ayrs_new.RData")
+load("~./data/InputData/pwise_time_plants.RData")
+load("~./data/InputData/pwise_time_herb.RData")
+load("~./data/InputData/pwise_time_pred.RData")
 
-#insects
-load("./pwise_space_in_new.RData")
-load("./pwise_time_ayrs_in_new.RData")
+load("~./data/InputData/pwise_space_plants.RData")
+load("~./data/InputData/pwise_space_herb.RData")
+load("~./data/InputData/pwise_space_pred.RData")
 
 #in case it does not work, it might be that the vector of standardised differences
 #in alpha diversity - da0/1/2/3/4st got lost
 
 #so check if $da0/1/2/3/4st, $dha0/1/2/3/4st, $dpa0/1/2/3/4st is there, 
-#if not run code below:
+# if missing run code in folder 1. dataset creation/1.Prepare input data...
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # BACKUP CODE # # # # # # # # # # # # # # # # # # # #
-
-library(vegan)
-#plants - space
-pwise_space$da0st<- decostand(pwise_space$da0, method = "range", na.rm=T)
-pwise_space$da1st<- decostand(pwise_space$da1, method = "range", na.rm=T)
-pwise_space$da2st<- decostand(pwise_space$da2, method = "range", na.rm=T)
-pwise_space$da3st<- decostand(pwise_space$da3, method = "range", na.rm=T)
-pwise_space$da4st<- decostand(pwise_space$da4, method = "range", na.rm=T)
-
-#plants - time
-pwise_time_ayrs$da0st<- decostand(pwise_time_ayrs$da0, method = "range", na.rm=T)
-pwise_time_ayrs$da1st<- decostand(pwise_time_ayrs$da1, method = "range", na.rm=T)
-pwise_time_ayrs$da2st<- decostand(pwise_time_ayrs$da2, method = "range", na.rm=T)
-pwise_time_ayrs$da3st<- decostand(pwise_time_ayrs$da3, method = "range", na.rm=T)
-pwise_time_ayrs$da4st<- decostand(pwise_time_ayrs$da4, method = "range", na.rm=T)
-
-#herbivores - space
-pwise_space_in$dha0st<- decostand(pwise_space_in$dha0, method = "range", na.rm=T)
-pwise_space_in$dha1st<- decostand(pwise_space_in$dha1, method = "range", na.rm=T)
-pwise_space_in$dha2st<- decostand(pwise_space_in$dha2, method = "range", na.rm=T)
-pwise_space_in$dha3st<- decostand(pwise_space_in$dha3, method = "range", na.rm=T)
-pwise_space_in$dha4st<- decostand(pwise_space_in$dha4, method = "range", na.rm=T)
-
-#herbivores - time
-pwise_time_ayrs$da0st<- decostand(pwise_time_ayrs$da0, method = "range", na.rm=T)
-pwise_time_ayrs$da1st<- decostand(pwise_time_ayrs$da1, method = "range", na.rm=T)
-pwise_time_ayrs$da2st<- decostand(pwise_time_ayrs$da2, method = "range", na.rm=T)
-pwise_time_ayrs$da3st<- decostand(pwise_time_ayrs$da3, method = "range", na.rm=T)
-pwise_time_ayrs$da4st<- decostand(pwise_time_ayrs$da4, method = "range", na.rm=T)
-
-#sec. consumers - space
-pwise_space_in$dpa0st<- decostand(pwise_space_in$dpa0, method = "range", na.rm=T)
-pwise_space_in$dpa1st<- decostand(pwise_space_in$dpa1, method = "range", na.rm=T)
-pwise_space_in$dpa2st<- decostand(pwise_space_in$dpa2, method = "range", na.rm=T)
-pwise_space_in$dpa3st<- decostand(pwise_space_in$dpa3, method = "range", na.rm=T)
-pwise_space_in$dpa4st<- decostand(pwise_space_in$dpa4, method = "range", na.rm=T)
-
-#sec. consumers - time
-pwise_time_ayrs_in$dpa0st<- decostand(pwise_time_ayrs_in$dpa0, method = "range", na.rm=T)
-pwise_time_ayrs_in$dpa1st<- decostand(pwise_time_ayrs_in$dpa1, method = "range", na.rm=T)
-pwise_time_ayrs_in$dpa2st<- decostand(pwise_time_ayrs_in$dpa2, method = "range", na.rm=T)
-pwise_time_ayrs_in$dpa3st<- decostand(pwise_time_ayrs_in$dpa3, method = "range", na.rm=T)
-pwise_time_ayrs_in$dpa4st<- decostand(pwise_time_ayrs_in$dpa4, method = "range", na.rm=T)
-
-# this is also the input for all other alpha models, so please save the new version of the file :)
-
-save(pwise_space, file="pwise_space_new.RData")
-save(pwise_time_ayrs, file="pwise_time_ayrs_new.RData")
-
-save(pwise_space_in, file="pwise_space_new_in.RData")
-save(pwise_time_ayrs_in, file="pwise_time_ayrs_new_in.RData")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
 
 #temporal diva/group
-Bsim_time<-c(pwise_time_ayrs$bsim, #plants
-             pwise_time_ayrs_in$hbsim,#herbivores
-             pwise_time_ayrs_in$pbsim) #sec. consumers
-B0_time<-c(pwise_time_ayrs$cqn0dis, 
-           pwise_time_ayrs_in$hcqn0dis,
-           pwise_time_ayrs_in$pcqn0dis) 
-B1_time<-c(pwise_time_ayrs$cqn1dis,
-           pwise_time_ayrs_in$hcqn1dis,
-           pwise_time_ayrs_in$pcqn1dis) 
-B2_time<-c(pwise_time_ayrs$cqn2dis,
-           pwise_time_ayrs_in$hcqn2dis,
-           pwise_time_ayrs_in$pcqn2dis) 
-B3_time<-c(pwise_time_ayrs$cqn3dis,
-           pwise_time_ayrs_in$hcqn3dis,
-           pwise_time_ayrs_in$pcqn3dis) 
-B4_time<-c(pwise_time_ayrs$cqn4dis,
-           pwise_time_ayrs_in$hcqn4dis,
-           pwise_time_ayrs_in$pcqn4dis) 
+Bsim_time<-c(pwise_time_plants$bsim, #plants
+             pwise_time_herb$hbsim,#herbivores
+             pwise_time_pred$pbsim) #sec. consumers
+B0_time<-c(pwise_time_plants$cqn0dis, 
+           pwise_time_herb$hcqn0dis,
+           pwise_time_pred$pcqn0dis) 
+B1_time<-c(pwise_time_plants$cqn1dis,
+           pwise_time_herb$hcqn1dis,
+           pwise_time_pred$pcqn1dis) 
+B2_time<-c(pwise_time_plants$cqn2dis,
+           pwise_time_herb$hcqn2dis,
+           pwise_time_pred$pcqn2dis) 
+B3_time<-c(pwise_time_plants$cqn3dis,
+           pwise_time_herb$hcqn3dis,
+           pwise_time_pred$pcqn3dis) 
+B4_time<-c(pwise_time_plants$cqn4dis,
+           pwise_time_herb$hcqn4dis,
+           pwise_time_pred$pcqn4dis) 
 
-A0_time<-c(pwise_time_ayrs$da0st, 
-           pwise_time_ayrs_in$dha0st,
-           pwise_time_ayrs_in$dpa0st) 
+A0_time<-c(pwise_time_plants$da0st, 
+           pwise_time_herb$dha0st,
+           pwise_time_pred$dpa0st) 
 
-A1_time<-c(pwise_time_ayrs$da1st, 
-           pwise_time_ayrs_in$dha1st,
-           pwise_time_ayrs_in$dpa1st) 
+A1_time<-c(pwise_time_plants$da1st, 
+           pwise_time_herb$dha1st,
+           pwise_time_pred$dpa1st) 
 
-A2_time<-c(pwise_time_ayrs$da2st, 
-           pwise_time_ayrs_in$dha2st,
-           pwise_time_ayrs_in$dpa2st) 
+A2_time<-c(pwise_time_plants$da2st, 
+           pwise_time_herb$dha2st,
+           pwise_time_pred$dpa2st) 
 
-A3_time<-c(pwise_time_ayrs$da3st, 
-           pwise_time_ayrs_in$dha3st,
-           pwise_time_ayrs_in$dpa3st) 
+A3_time<-c(pwise_time_plants$da3st, 
+           pwise_time_herb$dha3st,
+           pwise_time_pred$dpa3st) 
 
-A4_time<-c(pwise_time_ayrs$da4st, 
-           pwise_time_ayrs_in$dha4st,
-           pwise_time_ayrs_in$dpa4st) 
+A4_time<-c(pwise_time_plamts$da4st, 
+           pwise_time_herb$dha4st,
+           pwise_time_pred$dpa4st) 
 
-EP_time<-c(pwise_time_ayrs$EP, pwise_time_ayrs_in$EP, 
-           pwise_time_ayrs_in$EP) 
+EP_time<-c(pwise_time_plants$EP, pwise_time_herb$EP, 
+           pwise_time_pred$EP) 
 
-dYR_time<-c(pwise_time_ayrs$dYR, pwise_time_ayrs_in$dYR, 
-            pwise_time_ayrs_in$dYR) 
+dYR_time<-c(pwise_time_plants$dYR, pwise_time_herb$dYR, 
+            pwise_time_pred$dYR) 
 
-mLUIraw<- c(pwise_time_ayrs$mLUI_raw, pwise_time_ayrs_in$mLUI_raw, 
-            pwise_time_ayrs_in$mLUI_raw) 
-mLUIscaled<- c(pwise_time_ayrs$mLUI, pwise_time_ayrs_in$mLUI, 
-               pwise_time_ayrs_in$mLUI) 
-dLUI<- c(pwise_time_ayrs$dLUI, pwise_time_ayrs_in$dLUI, 
-         pwise_time_ayrs_in$dLUI) 
+mLUIraw<- c(pwise_time_plants$mLUI_raw, pwise_time_herb$mLUI_raw, 
+            pwise_time_pred$mLUI_raw) 
+mLUIscaled<- c(pwise_time_plants$mLUI, pwise_time_herb$mLUI, 
+               pwise_time_pred$mLUI) 
+dLUI<- c(pwise_time_plants$dLUI, pwise_time_herb$dLUI, 
+         pwise_time_pred$dLUI) 
 
 mMOWraw<- c(pwise_time_ayrs$mMOW_raw, pwise_time_ayrs_in$mMOW_raw, 
             pwise_time_ayrs_in$mMOW_raw) 
@@ -2265,20 +2204,17 @@ reg<- c(paste(pwise_space_plants$dREG), paste(pwise_space_insects$dREG),
         paste(pwise_space_insects$dREG))
 div_space$reg<- as.factor(reg)
 
+
+# set working directory to R Functions
+# and the we link the functions to plott results to this script
+source("./functions_plotting_results.R")
+
 # # # # dataset with all beta measures, averaged per region
 ## spatial data only within region averages
 
 #TODO remove function, keep explanation
 # calc_se <- function(x, N) sqrt(var(x, na.rm = T) / N) # function to calc standard error
 # need to input N : the number of unique observations (number of plots * number of year)
-# NOTE : we don't take the number of comparisons, but the number of UNIQUE observations
-# before building the pairs. because the standard error taking number of comparisons is
-# too small --> would give wrong impression of accuracy
-#TODO : this function is not used, but descritipon of way of calculating SE should be kept
-# length(unique(pwise_space$EPy1)) # 1639
-# length(unique(pwise_space_in$EPy1)) # 1397
-# length(unique(pwise_time_ayrs$EPy1)) # 1500
-# length(unique(pwise_time_ayrs_in$EPy1)) # 1257
 div_temp$N_unique_obs <- length(unique(pwise_time_insects$EPy1))
 div_temp$N_unique_obs[which(div_temp$group == "plant")] <- length(unique(pwise_time_plants$EPy1))
 div_space$N_unique_obs <- length(unique(pwise_space_insects$EPy1))
@@ -2292,59 +2228,6 @@ rm(div_space)
 # functions use data.table solution --> therefore need to change class.
 div_temp <- data.table(div_temp)
 div_space_within_reg <- data.table(div_space_within_reg)
-
-
-# GENERAL SOLUTION NEEDED -----
-#TODO move function to functions folder?
-# The following part contains 2 functions which calculate mean and sd for each measure
-#    and return a table for plotting.
-# div_colname <- "B0_time"
-# div_dataset <- div_temp
-# outname <- "b0"
-calc_temporal_regionwise_mean_sd <- function(div_colname, div_dataset, outname){
-  # Temporal
-  # mean
-  temp <- aggregate(formula = formula(paste(div_colname, " ~ reg + group", sep = "")),
-                    data = div_dataset,
-                    FUN = function(x) mean(x, na.rm = T))
-  names(temp)[grep(div_colname, names(temp))] <- paste("temp_mean", outname, sep = "_") # name new column
-  # standard error
-  div_dataset[, se := sd(get(div_colname), na.rm = T), by = .(reg, group)] # for "special" SE calc, go with data.table
-  div_dataset[, sd := se] # save standard deviation for later
-  div_dataset[, se := se / sqrt(N_unique_obs)]
-  temp <- merge(temp, unique(div_dataset[, .(reg, group, se)]), by = c("reg", "group"))
-  div_dataset[, se := NULL]
-  names(temp)[grep("se", names(temp))] <- paste("temp_sd", outname, sep = "_")
-  # standard deviation
-  temp <- merge(temp, unique(div_dataset[, .(reg, group, sd)]), by = c("reg", "group")) # add standard deviation to table
-  div_dataset[, sd := NULL]
-  names(temp)[grep("^sd", names(temp))] <- paste("temp_standarddeviation", outname, sep = "_")
-  return(temp)
-}
-# sdiv_colname <- "B0_space"
-# sdiv_dataset <- div_space_within_reg
-# soutname <- "b0"
-calc_spatial_regionwise_mean_sd_and_add_to_temporal <- function(temp, sdiv_colname, sdiv_dataset, soutname){
-  # Spatial
-  # mean
-  temp <- merge(temp, aggregate(formula = formula(paste(sdiv_colname, " ~ reg + group", sep = "")), 
-                                data = sdiv_dataset, 
-                                FUN = function(x) mean(x, na.rm = T)), by = c("reg", "group"))
-  names(temp)[grep(sdiv_colname, names(temp))] <- paste("space_mean", soutname, sep = "_")
-  # standard error
-  sdiv_dataset[, se := sd(get(sdiv_colname), na.rm = T), by = .(reg, group)]
-  sdiv_dataset[, sd := se]
-  sdiv_dataset[, se := se / sqrt(N_unique_obs)]
-  temp <- merge(temp, unique(sdiv_dataset[, .(reg, group, se)]), by = c("reg", "group"))
-  sdiv_dataset[, se := NULL]
-  names(temp)[grep("se", names(temp))] <- paste("space_sd", soutname, sep = "_")
-  # standard deviation
-  temp <- merge(temp, unique(sdiv_dataset[, .(reg, group, sd)]), by = c("reg", "group")) # add standard deviation to table
-  sdiv_dataset[, sd := NULL]
-  names(temp)[grep("^sd", names(temp))] <- paste("space_standarddeviation", soutname, sep = "_")
-  return(temp)
-}
-# General solution end
 
 
 # CREATE MEAN AND STANDARD ERROR PER REGION PER GROUP ----
@@ -2412,21 +2295,15 @@ reg<- as.factor(rep(c("AEG", "HEG", "SEG"), each=3))
 #TODO re-convert space and time div to data.frame from data.table
 
 
-
-# # # # #
-# 3.x. - CLEAN ME END ----
-#
-
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
-
 # # # # # # # # # # # # # #
 # 3 - SCATTERPLOTS              ----
 #
 library(ggplot2)
 library(cowplot)
+
+# set working directory to R Functions
+# and the we link the functions to plott results to this script
+source("./functions_plotting_results.R")
 
 # always : plants in green, herbivores in orange and secondary consumers in violet
 #  note : less error-prone to include colors of plotting in table
@@ -2440,51 +2317,7 @@ for(d in c(paste("b", c("sim", seq(0, 4)), sep = ""), paste("a", seq(0, 4), sep 
 # plotting parameters
 errorbar_width <- 0.01
 
-#TODO move functions to functions folder?
-# general solution : function to reproduce the same plot over and over
-generate_time_space_comparison_scatterplot <- function(dat, dat_name, pretty_name, errorbartype = "standarderror"){
-  # function arguments : 
-  # dat <- bsim                 # dataset which contains the values to plot
-  # dat_name <- "bsim"          # suffix in the dataset column names
-  # pretty_name <- "beta sim"   # plot title
-  # errorbartype = "standarddeviation"
-  names(dat) <- sub(paste("_", dat_name, sep = ""), "", names(dat))  # make column names general
-  p <- ggplot(dat, aes(x = temp_mean, y = space_mean, col = col_by_group)) +
-    scale_colour_identity() +
-    geom_point() + theme_half_open() +
-    xlim(c(0, 1)) + ylim(c(0,1 )) +
-    geom_abline(intercept = 0, slope =1, linetype = "dashed") +
-    xlab("temporal beta-diversity") +
-    ylab("spatial beta-diversity") +
-    ggtitle(pretty_name)
-  if(errorbartype == "standarderror"){
-    p <- p + geom_errorbar(data = dat, mapping = aes(x = temp_mean, 
-                                                     ymin = space_mean - space_sd,
-                                                     ymax = space_mean + space_sd), width = errorbar_width) +
-      geom_errorbar(data = dat, mapping = aes(y = space_mean, 
-                                              xmin = temp_mean - temp_sd,
-                                              xmax = temp_mean + temp_sd), width = errorbar_width)
-  }
-  if(errorbartype == "standarddeviation"){
-    print("plotting standard deviation")
-    p <- p + geom_errorbar(data = dat, mapping = aes(x = temp_mean, 
-                                                     ymin = space_mean - space_standarddeviation,
-                                                     ymax = space_mean + space_standarddeviation), width = errorbar_width) +
-      geom_errorbar(data = dat, mapping = aes(y = space_mean, 
-                                              xmin = temp_mean - temp_standarddeviation,
-                                              xmax = temp_mean + temp_standarddeviation), width = errorbar_width) +
-      xlim(c(0, 1.4)) + ylim(c(0, 1.4))
-  }
-  return(p)
-}
-
-p_bsim <- generate_time_space_comparison_scatterplot(dat = bsim, dat_name = "bsim", 
-                                                     pretty_name = "Turnover, bsim")
-#p_bsim_std <- generate_time_space_comparison_scatterplot(dat = bsim, dat_name = "bsim", 
-#                                                         pretty_name = "Turnover (beta sim)",
-#                                                         errorbartype = "standarddeviation")
-
-
+# plotting
 p_b0 <- generate_time_space_comparison_scatterplot(dat = b0, dat_name = "b0", 
                                                    pretty_name = "q=0")
 p_b1 <- generate_time_space_comparison_scatterplot(dat = b1, dat_name = "b1", 
@@ -2514,82 +2347,3 @@ plot_grid(p_bsim, p_b0, p_b1, p_b2, labels = c("(a)", "(b)", "(c)", "(d)"))
 # see this tutorial (I use it a lot): https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html
 
 
-
-# # # # # # # # # # # # # #
-# 3 - old plotting code below              ----
-#
-# original plotting part below
-
-load("./all_region_means.RData")
-
-cols <- c("#1b9e77", "#d95f02", "#7570b3")
-
-plot.new()
-par(mfrow=c(2,5))
-par(mar=c(5,5,4,2))
-
-attach(all_mean)
-
-plot(bsim$temp_mean_bsim, bsim$space_mean_bsim, col=cols, 
-     ylim=c(0,1), xlim=c(0,1),pch=20, 
-     xlab="temporal beta-diversity",
-     ylab="spatial beta-diversity",
-     cex=1.5, cex.axis=1.5, cex.lab=1.2,
-     main="(a) - Turnover (beta sim)")
-abline(a=0, b=1, lty=2)
-#TODO assign x and y to variables and re-use for next plot
-segments(x0 = temp_mean_sim, y0 = space_mean_sim-space_sd_sim, x1 = temp_mean_sim , y1 =space_mean_sim+space_sd_sim)
-segments(x0 = temp_mean_sim-temp_sd_sim, x1 =temp_mean_sim+temp_sd_sim, y0 = space_mean_sim, y1 = space_mean_sim)
-# epsilon <- 0.001
-# segments(x0 = temp_mean_sim - epsilon, x1 = temp_mean_sim + epsilon, y0 = space_mean_sim-space_sd_sim)
-# segments(x0 = temp_mean_sim - epsilon, x1 = temp_mean_sim + epsilon, y0 = space_mean_sim+space_sd_sim)
-
-plot(all_mean$temp_mean_b0, space_mean_b0, col=cols, 
-     ylim=c(0,1), xlim=c(0,1),pch=20,
-     xlab="temporal beta-diversity",
-     ylab="spatial beta-diversity",
-     cex=1.5, cex.axis=1.5, cex.lab=1.2,
-     main="(c) - Soerensen Dissimilarity\n(Chao 0)")
-abline(a=0, b=1, lty=2)
-
-plot(temp_mean_b1, space_mean_b1, col=cols, 
-     ylim=c(0,1), xlim=c(0,1),pch=20,
-     xlab="temporal beta-diversity",
-     ylab="spatial beta-diversity",
-     cex=1.5, cex.axis=1.5, cex.lab=1.2,
-     main="(d) - Morisita Dissimilarity\n(Chao 1)")
-abline(a=0, b=1, lty=2)
-
-plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = '', ylab = '', xlab = '')
-legend("center", pch=16, col=cols, legend=levels(div_temp$group),
-       title="Group", bty="n", xjust=3, cex=1.25 )
-
-plot(temp_mean_b2, space_mean_b2, col=cols, 
-     ylim=c(0,1), xlim=c(0,1),pch=20,
-     xlab="temporal beta-diversity",
-     ylab="spatial beta-diversity",
-     cex=1.5, cex.axis=1.5, cex.lab=1.2,
-     main="(e) - Morisita-Horn\nDissimilarity\n(Chao 2)")
-abline(a=0, b=1, lty=2)
-
-plot(temp_mean_b3, space_mean_b3, col=cols, 
-     ylim=c(0,1), xlim=c(0,1),pch=20,
-     xlab="temporal beta-diversity",
-     ylab="spatial beta-diversity",
-     cex=1.5, cex.axis=1.5, cex.lab=1.2,
-     main="(f) - Chao 3")
-abline(a=0, b=1, lty=2)
-
-plot(temp_mean_b4, space_mean_b4, col=cols, 
-     ylim=c(0,1), xlim=c(0,1),pch=20,
-     xlab="temporal beta-diversity",
-     ylab="spatial beta-diversity",
-     cex=1.5, cex.axis=1.5, cex.lab=1.2,
-     main="(g) - Chao 4")
-abline(a=0, b=1, lty=2)
-
-plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = "", ylab = '', xlab = '')
-
-plot(0, xaxt = 'n', yaxt = 'n', bty = 'n', pch = "", ylab = '', xlab = '')
-legend("center", pch= c(1:3), col="black", legend=levels(all_mean$reg),
-       title="Regions", bty="n", xjust=3, cex=1.25 )
