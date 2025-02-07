@@ -1936,7 +1936,7 @@ text(-0.6,-1.0,
 #
 
 # # # # code how to produce div_temp_fig, and div_space_fig.RData # # # # # # # # # # # # # # #  # # # #
-# datset having alpha and beta diversity of all organisms together
+# dataset having alpha and beta diversity of all organisms together
 # # # # # # # # # # # # # # #  # # # #
 
 #data
@@ -1999,7 +1999,7 @@ A3_time<-c(pwise_time_plants$da3st,
            pwise_time_herb$dha3st,
            pwise_time_pred$dpa3st) 
 
-A4_time<-c(pwise_time_plamts$da4st, 
+A4_time<-c(pwise_time_plants$da4st, 
            pwise_time_herb$dha4st,
            pwise_time_pred$dpa4st) 
 
