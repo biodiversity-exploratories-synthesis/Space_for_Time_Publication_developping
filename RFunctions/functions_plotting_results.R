@@ -93,7 +93,7 @@ generate_time_space_comparison_scatterplot <- function(dat, dat_name, pretty_nam
 
 # example
 #without std
-p_bsim <- generate_time_space_comparison_scatterplot(dat = bsim, dat_name = "bsim", 
+# p_bsim <- generate_time_space_comparison_scatterplot(dat = bsim, dat_name = "bsim", 
                                                      pretty_name = "Turnover, bsim")
 
 #with std
