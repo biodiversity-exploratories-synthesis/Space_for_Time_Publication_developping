@@ -1,0 +1,21 @@
+Data analysis 2 - linear mixed-effects models (LM)
+
+The R scripts in this section aim to estimate the effect size and direction of diversity responses to spatial and temporal LUI changes (with linear mixed effects models, LM).
+Scripts to fit and test the LM models for temporal and spatial datasets, alpha and beta-diversity for plants, arthropod herbivores and secondary consumers/predators. In these models’ environmental covariates are included to adjust estimates for potential effects of environmental heterogeneity other than LUI. Note that the scripts for estimating the effect size and direction are twin scripts, with identical code for each diversity response (alpha, beta), and type of LUI measure (LUI index and its components, i.e. MOW – mowing frequency, GRA – grazing intensity, FER – fertilization intensity). Trophic groups (plants, arthropod herbivores and secondary consumers/predators) and types of LUI gradient are included into the same script. 
+
+1)	LUI
+a.	alpha: Script: 1_LM_EV_direction_LUI_alpha.R
+b.	beta: Script: 2_ LM_EV_direction_LUI_beta.R
+
+2)	MOW
+a.	alpha: Script: 3_ LM_EV_direction_MOW_alpha.R
+b.	beta: Script: 4_ LM_EV_direction_MOW_beta.R
+
+3)	GRA
+a.	alpha: Script: 5_ LM_EV_direction_GRA_alpha.R
+b.	beta: Script: 6_ LM_EV_direction_GRA_beta.R
+
+4)	FER
+a.	alpha: Script: 7_LM_EV_direction_FER_alpha.R
+b.	beta: Script: 8_ LM_EV_direction_FER_beta.R
+
