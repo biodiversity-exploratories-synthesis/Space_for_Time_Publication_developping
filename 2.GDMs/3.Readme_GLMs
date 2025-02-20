@@ -1,0 +1,54 @@
+Data analysis 1 - general dissimilarity models (GDM)
+
+The R scripts in this section aim to analyse significance and shape of diversity responses to spatial and temporal LUI changes (with general dissimilarity models, GDM).
+
+Scripts to fit and test the GDM models for temporal and spatial datasets, alpha and beta-diversity for plants, arthropod herbivores and secondary consumers/predators. The scripts are organized in two steps with each one folder per step.
+
+Step 1 – Fitting GDM models 
+
+Folder: 1. Fitting GDM models
+Note that the scripts for fitting GDMs are twin scripts, with identical code for each combination of diversity type (alpha, beta), trophic group (plants, arthropod herbivores and secondary consumers/predators) and type of LUI gradient (spatial, temporal).
+
+- alpha diversity: space and time in one script: 
+
+1)	Plants
+Script: 1_GDM_alpha_plants_scaled_yall_space.R
+
+2)	arthropod herbivores
+Script: 2_GDM_alpha_herb_scaled_yall_space.R
+
+3)	arthropod secondary consumers/herbivores
+Script: 3_GDM_alpha_pred_scaled_yall_space.R
+
+
+- beta diversity: space and time in separate scripts:  
+
+1)	plants
+a.	space: Script: 4_gdm_beta_plants_space_LU_scaled.R
+b.	time: Script: 5_ gdm_beta_plants_yall_LU_scaled.R
+
+2)	arthropod herbivores
+a.	space: Script: 6_ gdm_beta_insHERB_space_LU_scaled.R
+b.	time: Script: 7_ gdm_beta_inHERB_yall_LU_scaled.R
+
+3)	arthropod secondary consumers/herbivores
+a.	space: Script: 8_ gdm_beta_inPRED_space_LU_scaled.R
+b.	time: Script: 9_ gdm_beta_inPRED_yall_LU_scaled.R
+
+Step 2 – Estimating significance of GDM models 
+
+Folder: 2. Significance of GDM models
+
+P-values are calculated by permutation with function varIMP adjusted for temporal replicates. Note that the scripts for estimating the significance (p-values) of GDMs are twin scripts, with identical code for each combination of diversity type (alpha, beta), trophic group (plants, arthropod herbivores and secondary consumers/predators) and type of LUI gradient (spatial, temporal). LUI is included in each script as LUI index and its components (MOW – mowing frequency, GRA – grazing intensity, FER – fertilization intensity). The tests of functionality of the adapted varIMP function is also documented in a separate file (Script: GDM_varIMP_test_varimp.edit_function.R). The permutation part of the varIMP function runs very slowly and should be considered to be run on a high-performance computer.
+
+    - alpha diversity: space and time in one script
+
+1)	plants: Script: 1_GDM_VarIMP_plant_alpha_scaled.R
+2)	arthropod herbivores: Script: 2_ GDM_VarIMP_herb_alpha_scaled.R
+3)	arthropod secondary consumers/herbivores: Script: 3_ GDM_VarIMP_pred_alpha_scaled.R
+
+    - beta diversity: space and time in one script:
+
+4)	plants: Script: 4_ GDM_VarIMP_plants.R
+5)	arthropod herbivores: Script: 5_ GDM_VarIMP_herb_scaled.R
+6)	arthropod secondary consumers/herbivores: Script: 6_ GDM_VarIMP_pred_scaled.R
