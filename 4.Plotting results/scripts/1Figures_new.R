@@ -8,7 +8,7 @@
 # # # # # # # # # # # # # #
 # CONTENT                  ----
 # AIM : contains code to create all figures
-# The data paths need to be adapted to the directory situation. If the recommendations
+# The data paths need to be adapted to the directory situation. If e.g. the recommendations
 # of folder Structure in 1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/README.txt were followed:
 # "1.Dataset creation/step 1 - Prepare_input_data_plotwise_pairwise/data/OutputData/"
 
