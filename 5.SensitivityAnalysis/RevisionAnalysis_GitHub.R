@@ -36,23 +36,14 @@ library(ggplot2)
 
 ## b data ####
 
-#option 1: working with the raw data
-#then continue with c
-
 #set working directory to folder "5. Sensitivity Analysis"
-load("data/InputData/pwise_space_plants.RData")
-load("data/InputData/pwise_space_herb.RData")
-load("data/InputData/pwise_space_pred.RData")
+load("./InputData/pwise_space_plants.RData")
+load("./InputData/pwise_space_herb.RData")
+load("./InputData/pwise_space_pred.RData")
 
-load("data/InputData/pwise_time_plants.RData")
-load("data/InputData/pwise_time_herb.RData")
-load("data/InputData/pwise_time_pred.RData")
-
-#option 2: working with prepared data:
-#then continue with d
-load("data/InputData/LUIrandom.RData")#created under c
-load("data/InputData/LUIrandomh.RData")#created under c
-load("data/InputData/LUIrandomp.RData")#created under c
+load("./InputData/pwise_time_plants.RData")
+load("./InputData/pwise_time_herb.RData")
+load("./InputData/pwise_time_pred.RData")
 
 ## c analysis ####
 
@@ -144,7 +135,7 @@ for(i in 1:50){
 
 remove(dat, gdmTab, GDM)
 
-save(splines, file="data/InputData/splines_plants.RData")
+save(splines, file="./InputData/splines_plants.RData")
 
 rm(splines)
 rm(pwise_time)
@@ -196,7 +187,7 @@ for(i in 1:50){
 
 remove(dat, gdmTab, GDM)
 
-save(splines, file="data/InputData/splines_herb.RData")
+save(splines, file="./InputData/splines_herb.RData")
 
 rm(splines)
 rm(pwise_time_herb)
@@ -247,7 +238,7 @@ for(i in 1:50){
 
 remove(dat, gdmTab, GDM)
 
-save(splines, file="data/InputData/splines_pred.RData")
+save(splines, file="./InputData/splines_pred.RData")
 
 rm(pwise_time)
 rm(splines)
@@ -255,7 +246,7 @@ rm(splines)
 ## d plotting ####
 
 #### 1 plants ####
-load("data/InputData/splines_plants.RData")
+load("./InputData/splines_plants.RData")
 plots<- list()
 
 for(j in 1:50){
@@ -274,7 +265,7 @@ for(j in 1:50){
   
 }
 
-save(plots, file="data/OutputData/plots_plants.RData")
+save(plots, file="./OutputData/plots_plants.RData")
 
 for (k in 1:50) {
   file_name = paste("randomGDM_plants", k, ".tiff", sep="")
@@ -295,7 +286,7 @@ rm(splines)
 
 #### 2 ins. herbivores ####
 
-load(".data/InputData/splines_herb.RData")
+load("./InputData/splines_herb.RData")
 plots<- list()
 
 for(j in 1:50){
@@ -314,7 +305,7 @@ for(j in 1:50){
   
 }
 
-save(plots, file="data/OutputData/plots_herb.RData")
+save(plots, file="./OutputData/plots_herb.RData")
 
 for (k in 1:50) {
   file_name = paste("randomGDM_herb", k, ".tiff", sep="")
@@ -336,7 +327,7 @@ rm(splines)
 
 #### 3 ins. sec. consumers ####
 
-load("data/InputData/splines_pred.RData")
+load("./InputData/splines_pred.RData")
 plots<- list()
 
 for(j in 1:50){
@@ -355,7 +346,7 @@ for(j in 1:50){
   
 }
 
-save(plots, file="data/OutputData/plots_pred.RData")
+save(plots, file="./OutputData/plots_pred.RData")
 
 for (k in 1:50) {
   file_name = paste("randomGDM_pred", k, ".tiff", sep="")
@@ -397,28 +388,32 @@ library(vegan)
 # data prepared under 2 i. & ii. 00. data preparation
 # all predictors are standardized (z scores)
 # temporal data: EP residuals
-load("./tplants.RData")
-load("./therb.RData")
-load("./tpred.RData")
+load("./InputData/tplants.RData")
+load("./InputData/therb.RData")
+load("./InputData/tpred.RData")
 
 # spatial data: year means
-load("./splants.RData")
-load("./sherb.RData")
-load("./spred.RData")
+load("./InputData/splants.RData")
+load("./InputData/sherb.RData")
+load("./InputData/spred.RData")
 
 # option 2: upload raw data and run first data preparation (i./ii.)
 ### 0. upload raw data ####
 # this are the pair-wise datasets just reduced 
 # so that each plot occurrs only once
 # with its plot data
-# This modification was done in Excel, so prepared data are given here.
-# For this analysis insects data (herb, pred) are combined in one
-# dataset.
-div_plants<- read.csv("data/InputData/div_plants_edited.csv",
+# This modification was done in Excel, data was uploaded here again.
+# For this analysis insects data (herb, pred) were combined in one
+# dataset. But can be done with the pairwise data and only in R also for each 
+# group separately.
+
+# Adjust folder to where data ara stored. 
+
+div_plants<- read.csv("./InputData/div_plants_edited.csv",
                       header=T,
                       sep=";",
                       dec=".")
-div_insects<- read.csv("data/InputData/div_insects_edited.csv",
+div_insects<- read.csv("./InputData/div_insects_edited.csv",
                        header=T,
                        sep=";",
                        dec=".")
@@ -484,9 +479,9 @@ tpred<- data.frame(pred[,1:7], preds)
 colnames(tpred)<- colnames(pred)
 
 
-save(tplants, file="data/InputData/tplants.RData")
-save(therb, file="data/InputData/therb.RData")
-save(tpred, file="data/InputData/tpred.RData")
+save(tplants, file="./InputData/tplants.RData")
+save(therb, file="./InputData/therb.RData")
+save(tpred, file="./InputData/tpred.RData")
 
 #### ii. spatial analysis (year means) ####
 ?aggregate
@@ -557,9 +552,9 @@ preds<- apply(spatmodsc, 2, function(x)x/max(x, na.rm=T))
 spred<- data.frame(levels(as.factor(factor)), HWG$HWG1, RWG$RWG1, preds)
 colnames(spred)<- c("EP","HWG", "RWG", colnames(pred)[8:26])
 
-save(splants, file="data/InputData/splants.RData")
-save(sherb, file="data/InputData/sherb.RData")
-save(spred, file="data/InputData/spred.RData")
+save(splants, file="./InputData/splants.RData")
+save(sherb, file="./InputData/sherb.RData")
+save(spred, file="./InputData/spred.RData")
 
 
 ## c analysis ####
@@ -742,8 +737,8 @@ for (i in 1:5){
 }
 
 
-save(model_time_pred, file="data/OutputData/model_time_pred.RData")
-save(anova_time_pred, file="data/OutputData/anova_time_pred.RData")
+save(model_time_pred, file="./OutputData/model_time_pred.RData")
+save(anova_time_pred, file="./OutputData/anova_time_pred.RData")
 
 rm(modl, modm, modg, modf,
    testl, testm, testg, testf)
@@ -801,8 +796,8 @@ for (i in 1:5){
 }
 
 
-save(model_space_plants, file="data/OutputData/model_space_plants.RData")
-save(anova_space_plants, file="data/OutputData/anova_space_plants.RData")
+save(model_space_plants, file="./OutputData/model_space_plants.RData")
+save(anova_space_plants, file="./OutputData/anova_space_plants.RData")
 
 rm(modl, modm, modg, modf,
    testl, testm, testg, testf)
@@ -859,8 +854,8 @@ for (i in 1:5){
 }
 
 
-save(model_space_herb, file="data/OutputData/model_space_herb.RData")
-save(anova_space_herb, file="data/OutputData/anova_space_herb.RData")
+save(model_space_herb, file="./OutputData/model_space_herb.RData")
+save(anova_space_herb, file="./OutputData/anova_space_herb.RData")
 
 rm(modl, modm, modg, modf,
    testl, testm, testg, testf)
@@ -916,8 +911,8 @@ for (i in 1:5){
 }
 
 
-save(model_space_pred, file="data/OutputData/model_space_pred.RData")
-save(anova_space_pred, file="data/OutputData/anova_space_pred.RData")
+save(model_space_pred, file="./OutputData/model_space_pred.RData")
+save(anova_space_pred, file="./OutputData/anova_space_pred.RData")
 
 rm(modl, modm, modg, modf,
    testl, testm, testg, testf)
@@ -992,7 +987,7 @@ cor(pred$LUI1, pred$mLUI)
 
 #### 1 plants ####
 
-load("data/OutputData/model_time_plants.RData")
+load("./OutputData/model_time_plants.RData")
 
 par(mfrow=c(2,2))
 plot(model_time_plants$a0$LUI)
@@ -1024,7 +1019,7 @@ plot(model_time_plants$a4$FER)
 
 #### 2 ins. herbivores ####
 #AEG01 as outlier --> remove
-load("data/OutputData/model_time_herb.RData")
+load("./OutputData/model_time_herb.RData")
 
 # two plots with high diversity, especially for a0,a1
 # for now ok, see when plotting if problematic
@@ -1059,7 +1054,7 @@ plot(model_time_herb$a4$FER)
 
 #### 2 ins. sec. consumers ####
 #AEG01 as outlier
-load("data/OutputData/model_time_pred.RData")
+load("./OutputData/model_time_pred.RData")
 
 par(mfrow=c(2,2))
 plot(model_time_pred$a0$LUI)
@@ -1093,7 +1088,7 @@ plot(model_time_pred$a4$FER)
 
 #### 1 plants ####
 
-load("data/OutputData/model_space_plants.RData")
+load("./OutputData/model_space_plants.RData")
 
 # plots 59,70,91 and 93 inflate the variance
 # higher diversity than the others
@@ -1162,7 +1157,7 @@ plot(model_space_herb$a4$FER)
 
 #### 2 ins. sec. consumers ####
 
-load("data/OutputData/model_space_pred.RData")
+load("./OutputData/model_space_pred.RData")
 
 par(mfrow=c(2,2))
 plot(model_space_pred$a0$LUI)
@@ -1232,14 +1227,14 @@ LMresults[,7]<- rep(1, times=360)
 
 ### i. temporal analysis ####
 
-load("data/OutputData/anova_time_plants.RData")
-load("data/OutputData/model_time_plants.RData")
+load("./OutputData/anova_time_plants.RData")
+load("./OutputData/model_time_plants.RData")
 
-load("data/OutputData/anova_time_herb.RData")
-load("data/OutputData/model_time_herb.RData")
+load("./OutputData/anova_time_herb.RData")
+load("./OutputData/model_time_herb.RData")
 
-load("data/OutputData/anova_time_pred.RData")
-load("data/OutputData/model_time_pred.RData")
+load("./OutputData/anova_time_pred.RData")
+load("./OutputData/model_time_pred.RData")
 
 
 estt<- c()
@@ -1298,14 +1293,14 @@ for(i in 1:5){
 
 ### ii. spatial analysis ####
 
-load("data/OutputData/anova_space_plants.RData")
-load("data/OutputData/model_space_plants.RData")
+load("./OutputData/anova_space_plants.RData")
+load("./OutputData/model_space_plants.RData")
 
-load("data/OutputData/anova_space_herb.RData")
-load("data/OutputData/model_space_herb.RData")
+load("./OutputData/anova_space_herb.RData")
+load("./OutputData/model_space_herb.RData")
 
-load("data/OutputData/anova_space_pred.RData")
-load("data/OutputData/model_space_pred.RData")
+load("./OutputData/anova_space_pred.RData")
+load("./OutputData/model_space_pred.RData")
 
 ests<- c()
 Fvals<- c()
@@ -1375,32 +1370,32 @@ LMresults[,9]<- pval
 
 LMresults<- as.data.frame(LMresults)
 
-save(LMresults, file="data/OutputData/LMresults.RData")
-write.table(LMresults, file="data/OutputData/LMresults.txt")
+save(LMresults, file="./OutputData/LMresults.RData")
+write.table(LMresults, file="./OutputData/LMresults.txt")
 
 ## e plotting ####
 ### 0. data ####
 
 # option 1: use raw data and continue with data preparation
 #raw data - NB: use prepared data
-load("data/OutputData/LMresults.RData")
-load("data/InputData/tplants.RData")
-load("data/InputData/splants.RData")
-load("data/InputData/therb.RData")
-load("data/InputData/sherb.RData")
-load("data/InputData/tpred.RData")
-load("data/InputData/spred.RData")
+load("./OutputData/LMresults.RData")
+load("./InputData/tplants.RData")
+load("./InputData/splants.RData")
+load("./InputData/therb.RData")
+load("./InputData/sherb.RData")
+load("./InputData/tpred.RData")
+load("./InputData/spred.RData")
 
 # option 2: use prepared data and continue with plotting
 #prepared data
-load("data/OutputData/ptlong.RData")
-load("data/OutputData/pslong.RData")
+load("./OutputData/ptlong.RData")
+load("./OutputData/pslong.RData")
 
-load("data/OutputData/htlong.RData")
-load("data/OutputData/hslong.RData")
+load("./OutputData/htlong.RData")
+load("./OutputData/hslong.RData")
 
-load("data/OutputData/sctlong.RData")
-load("data/OutputData/scslong.RData")
+load("./OutputData/sctlong.RData")
+load("./OutputData/scslong.RData")
 
 ### 00. code examples ####
 ggplot(df_long, aes(x1, value, color = variable)) +
@@ -1457,14 +1452,14 @@ sctlong <- gather(tpred, "abundance_weighting", "diversity",
                   pa0.1, pa1.1, pa2.1, pa3.1, pa4.1)
 sctlong$abundance_weighting<- as.factor(sctlong$abundance_weighting)
 
-save(ptlong, file="data/OutputData/ptlong.RData")
-save(pslong, file="data/OutputData/pslong.RData")
+save(ptlong, file="./OutputData/ptlong.RData")
+save(pslong, file="./OutputData/pslong.RData")
 
-save(htlong, file="data/OutputData/htlong.RData")
-save(hslong, file="data/OutputData/hslong.RData")
+save(htlong, file="./OutputData/htlong.RData")
+save(hslong, file="./OutputData/hslong.RData")
 
-save(sctlong, file="data/OutputData/sctlong.RData")
-save(scslong, file="data/OutputData/scslong.RData")
+save(sctlong, file="./OutputData/sctlong.RData")
+save(scslong, file="./OutputData/scslong.RData")
 
 #layout
 # 8 panel plot (cols: space, time; rows: LUI+LU components; col: hill numbers)
@@ -1656,9 +1651,9 @@ names(plants_plot_list)<- names_list
 names(herb_plot_list)<- names_list
 names(pred_plot_list)<- names_list
 
-save(plants_plot_list, file="data/OutputData/plants_plot_list.RData")
-save(herb_plot_list, file="data/OutputData/herb_plot_list.RData")
-save(pred_plot_list, file="data/OutputData/pred_plot_list.RData")
+save(plants_plot_list, file="./OutputData/plants_plot_list.RData")
+save(herb_plot_list, file="./OutputData/herb_plot_list.RData")
+save(pred_plot_list, file="./OutputData/pred_plot_list.RData")
 
 library(plyr)
 library(ggplot2)
@@ -1686,7 +1681,7 @@ library(stats)
 library(Rmisc)
 ## b data ####
 #table summarises model results and is provided prepared
-tab<- read.csv("data/InputData/SupMat_LMGDM_Summary.csv", 
+tab<- read.csv("./InputData/SupMat_LMGDM_Summary.csv", 
                header=T, 
                sep=";",
                dec=".")
@@ -1839,7 +1834,7 @@ emm2$emmeans
 # and continue with uploading data below and then plotting
 
 # tab_agg1
-load("data/InputData/tab_agg1.RData")
+load("./InputData/tab_agg1.RData")
 
 tab_agg1$id1<- factor(tab_agg1$id1, levels=c( "arthropod secondary consumers",
                                               "arthropod herbivores",
@@ -1850,7 +1845,7 @@ tab_agg1$int<- as.factor(interaction(tab_agg1$id3,
                                      tab_agg1$id1,
                                      tab_agg1$id4))
 # tab_agg2
-load("data/InputData/tab_agg2.RData")
+load("./InputData/tab_agg2.RData")
 
 tab_agg2$id2<- factor(tab_agg2$id2, levels=c( "significance",
                                               "effectsize",
@@ -1862,7 +1857,7 @@ tab_agg2$id4<- factor(tab_agg2$id4, levels=c("beta", "alpha"))
 tab_agg2$int<- as.factor(interaction(tab_agg2$id2, tab_agg2$id3))
 
 # tab_agg2a
-load("data/InputData/tab_agg2a.RData")
+load("./InputData/tab_agg2a.RData")
 
 tab_agg2a$id1<- factor(tab_agg2a$id1, levels=c( "arthropod secondary consumers",
                                                 "arthropod herbivores",
@@ -1872,7 +1867,7 @@ tab_agg2a$int<- as.factor(interaction(tab_agg2a$id1,
                                       tab_agg2a$id4))
 
 # tab_agg3
-load("data/InputData/tab_agg3.RData")
+load("./InputData/tab_agg3.RData")
 
 tab_agg3$id2<- factor(tab_agg3$id2, levels=c( "significance",
                                               "effectsize",
@@ -1908,13 +1903,13 @@ tab_agg1$int<- as.factor(interaction(tab_agg1$id3,
 # add manually the means and CIs from the emmeans objects as they are based on the
 # data distribution
 
-write.table(tab_agg1, file="data/InputData/tab_agg1.txt")
+write.table(tab_agg1, file="./InputData/tab_agg1.txt")
 tab_agg1<- read.csv("tab_agg1_ed.csv", 
                     header=T, 
                     sep=";",
                     dec=".")
 
-save(tab_agg1, file="data/InputData/tab_agg1.RData")
+save(tab_agg1, file="./InputData/tab_agg1.RData")
 #less conservative congruence
 # see dir-mean/d x in tab_agg
 
@@ -1938,13 +1933,13 @@ tab_agg2$int<- as.factor(interaction(tab_agg2$id1,
 # add manually the means and CIs from the emmeans objects as they are based on the
 # data distribution
 
-write.table(tab_agg2, file="data/InputData/tab_agg2.txt")
+write.table(tab_agg2, file="./InputData/tab_agg2.txt")
 tab_agg2<- read.csv("tab_agg2_ed.csv", 
                     header=T, 
                     sep=";",
                     dec=".")
 
-save(tab_agg2, file="data/InputData/tab_agg2.RData")
+save(tab_agg2, file="./InputData/tab_agg2.RData")
 #less conservative congruence
 # see dir-mean/d x in tab_agg
 
@@ -1967,13 +1962,13 @@ tab_agg2a$int<- as.factor(interaction(tab_agg2a$id1,
 # add manually the means and CIs from the emmeans objects as they are based on the
 # data distribution
 
-write.table(tab_agg2a, file="data/InputData/tab_agg2a.txt")
+write.table(tab_agg2a, file="./InputData/tab_agg2a.txt")
 tab_agg2a<- read.csv("tab_agg2a_ed.csv", 
                      header=T, 
                      sep=";",
                      dec=".")
 
-save(tab_agg2a, file="data/InputData/tab_agg2a.RData")
+save(tab_agg2a, file="./InputData/tab_agg2a.RData")
 
 ## accross all LU Types & organims ####
 tab_agg3<- aggregate(tab$congruence2[tab$congruence2>-10], 
@@ -1994,13 +1989,13 @@ tab_agg3$int<- as.factor(interaction(tab_agg3$id2, tab_agg3$id3))
 # add manually the means and CIs from the emmeans objects as they are based on the
 # data distribution
 
-write.table(tab_agg3, file="data/InputData/tab_agg3.txt")
+write.table(tab_agg3, file="./InputData/tab_agg3.txt")
 tab_agg3<- read.csv("tab_agg3_ed.csv", 
                     header=T, 
                     sep=";",
                     dec=".")
 
-save(tab_agg3, file="data/InputData/tab_agg3.RData")
+save(tab_agg3, file="./InputData/tab_agg3.RData")
 
 # plotting ####
 # with data aggregated accross LU Types to have more
