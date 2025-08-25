@@ -10,3 +10,4 @@ The scripts in this project shall be run in the following order (see the readme 
 2)	Data analysis: general dissimilarity models (GDM)
 3)	Data analysis: linear mixed effects models (LM)
 4)	Plotting of results
+5)	Sensitivity Aanalysis (and Plots)
